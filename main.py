@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+import warnings
 
 # Inlet properties
 coldStream = {"Tci": 20,  # C
@@ -30,7 +31,54 @@ hotStream = {"Tci": 60,  # C
              "mu": 6.51E-4  # kg/ms
              }
 
-epst = 0.0000015  # Pipe effective roughness height, mm
+def K(sigma, Ret, verbose = False):
+    """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
+       Will warn for out of range Reynolds number, but match to closest curve.
+
+    Args:
+        sigma (float): Ratio of total tube area to shell area.
+        Ret (float): Tube Reynolds number.
+
+    Returns:
+        float: Sum of Kc and Ke loss coefficients.
+    """
+
+    polyOrder = 2
+
+    # Reynolds range covered by curves
+    Remin = 3000
+    Re2 = 5000
+    Remax = 10000
+
+    if Ret > Remax:
+        dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
+        dfKe = dfKe3 = pd.read_csv("data/Turb_10000_Ke.csv")
+        warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remax = {Remax:.2f}), matching to closest curve.")
+    elif Ret > (Re2 + Remax)/2:
+        dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
+        dfKe = dfKe3 = pd.read_csv("data/Turb_10000_Ke.csv")
+    elif Ret > (Remin + Re2)/2:
+        dfKc = pd.read_csv("data/Turb_5000_Kc.csv")
+        dfKe = dfKe3 = pd.read_csv("data/Turb_5000_Ke.csv")
+    elif Ret >= Remin:
+        dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
+        dfKe = dfKe3 = pd.read_csv("data/Turb_3000_Ke.csv")
+    else:
+        dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
+        dfKe = dfKe3 = pd.read_csv("data/Turb_3000_Ke.csv")
+        warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remin = {Remin:.2f}), matching to closest curve.")
+  
+    # Fit polynomials to digitised data
+    polyCoeffsKc = np.polyfit(dfKc["sigma"], dfKc["Kc"], polyOrder)
+    polyCoeffsKe = np.polyfit(dfKe["sigma"], dfKe["Ke"], polyOrder)
+
+    # Evaluate polynomials
+    Kc, Ke = 0, 0
+    for i in range(polyOrder+1):
+        Kc += polyCoeffsKc[i] * sigma**(polyOrder-i)
+        Ke += polyCoeffsKe[i] * sigma**(polyOrder-i)
+
+    return Kc+Ke
 
 
 class HX:
@@ -78,7 +126,7 @@ class HX:
         self.B = B
         self.G = G
         self.ds = ds
-        self.dn = dn
+        self.dn = dn  
 
     def hydraulicAnalysisTube(self, mdt):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -97,14 +145,12 @@ class HX:
         dpTube = self.fTube * (self.lt / self.di) * 0.5 * self.coldStream["rho"] * self.Vt ** 2
 
         # End analysis
-        kc = 0.5
-        ke = 0.8
         self.As = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot / self.As
+        self.sigma = self.Attot * self.Np / self.As
 
         # Implement kc, ke lookup based on Ret, sigma
 
-        dpEnds = (kc + ke) * 0.5 * self.coldStream["rho"] * self.Vt ** 2
+        dpEnds = K(self.sigma, self.Ret) * 0.5 * self.coldStream["rho"] * self.Vt ** 2
 
         # Nozzle analysis
         self.An = self.dn ** 2 * np.pi / 4
