@@ -31,7 +31,7 @@ hotStream = {"Tci": 60,  # C
              "mu": 6.51E-4  # kg/ms
              }
 
-def K(sigma, Ret, verbose = False):
+def K(sigma, Ret):
     """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
        Will warn for out of range Reynolds number, but match to closest curve.
 
@@ -43,7 +43,7 @@ def K(sigma, Ret, verbose = False):
         float: Sum of Kc and Ke loss coefficients.
     """
 
-    polyOrder = 2
+    polyOrder = 3
 
     # Reynolds range covered by curves
     Remin = 3000
@@ -128,33 +128,49 @@ class HX:
         self.ds = ds
         self.dn = dn  
 
-    def hydraulicAnalysisTube(self, mdt):
+    def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
 
         Args:
-            mdt (float): Tube mass flow rate, kg/s.        
+            mdt (float): Tube mass flow rate, kg/s. 
+            verbose (bool): Whether or not to print intermediate values (velocities, areas, etc).       
         """
 
         # Tube analysis
         self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
-        self.Vt = self.mdt / (self.coldStream["rho"] * self.Attot)  # Bulk tube velocity, m/s
+        self.Vt = mdot / (self.coldStream["rho"] * self.Attot)  # Bulk tube velocity, m/s
         self.Ret = self.coldStream["rho"] * self.Vt * self.di / self.coldStream["mu"]  # Tube Reynolds
 
         # Haaland approximation of Colebrook-White for Darcy friction factor
         self.fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / self.Ret))) ** (-2)
-        dpTube = self.fTube * (self.lt / self.di) * 0.5 * self.coldStream["rho"] * self.Vt ** 2
+        dpTube = self.fTube * (self.lt / self.di) * 0.5 * self.coldStream["rho"] * (self.Vt**2)
 
         # End analysis
         self.As = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Np / self.As
+        self.sigma = self.Attot * self.Np / self.As # Note scaling with number of passes Np
 
-        # Implement kc, ke lookup based on Ret, sigma
-
-        dpEnds = K(self.sigma, self.Ret) * 0.5 * self.coldStream["rho"] * self.Vt ** 2
+        # Look up total loss factor, Kc+Ke, and calculate friction
+        self.Ktot = K(self.sigma, self.Ret)
+        dpEnds = self.Ktot * 0.5 * self.coldStream["rho"] * self.Vt ** 2
 
         # Nozzle analysis
         self.An = self.dn ** 2 * np.pi / 4
-        self.Vn = self.mdt / (self.coldStream["rho"] * self.An)
+        self.Vn = mdot / (self.coldStream["rho"] * self.An)
+        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * self.Vn ** 2
+
+        tubeTotaldP = dpTube + dpEnds + dpNozzles
+
+        if verbose:
+            print(f"\nTUBE HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
+            print(f"Tube flow area: {self.Attot:.6f} m^2")
+            print(f"Tube bulk velocity: {self.Vt:.2f} m/s")
+            print(f"Tube Reynolds number: {self.Ret:.0f}")
+            print(f"Tube friction factor: {self.fTube:.4f}")
+            print(f"Total inlet/exit loss factor: {self.Ktot:.3f}")
+            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (tube {dpTube:.0f},"\
+                  f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
+            
+        return tubeTotaldP 
 
     def thermalAnalysis(self):
         pass
