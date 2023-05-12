@@ -37,19 +37,29 @@ def K(sigma, Ret):
     Re2 = 5000
     Remax = 10000
 
+    interpolationFlag = False
+
     if Ret > Remax:
         dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
         dfKe = dfKe3 = pd.read_csv("data/Turb_10000_Ke.csv")
         warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remax = {Remax:.2f}), matching to closest curve.")
-    elif Ret > (Re2 + Remax)/2:
-        dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
-        dfKe = dfKe3 = pd.read_csv("data/Turb_10000_Ke.csv")
-    elif Ret > (Remin + Re2)/2:
+
+    elif Ret > Re2:
         dfKc = pd.read_csv("data/Turb_5000_Kc.csv")
-        dfKe = dfKe3 = pd.read_csv("data/Turb_5000_Ke.csv")
+        dfKc2 = pd.read_csv("data/Turb_10000_Kc.csv")
+        dfKe = pd.read_csv("data/Turb_5000_Ke.csv")
+        dfKe2 = pd.read_csv("data/Turb_10000_Ke.csv")
+
+        interpolationFlag = False # Can interpolate between two curves of different Re
+
     elif Ret >= Remin:
         dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
-        dfKe = dfKe3 = pd.read_csv("data/Turb_3000_Ke.csv")
+        dfKc2 = pd.read_csv("data/Turb_5000_Kc.csv")
+        dfKe = pd.read_csv("data/Turb_3000_Ke.csv")
+        dfKe2 = pd.read_csv("data/Turb_5000_Ke.csv")
+
+        interpolationFlag = True
+
     else:
         dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
         dfKe = dfKe3 = pd.read_csv("data/Turb_3000_Ke.csv")
@@ -59,11 +69,21 @@ def K(sigma, Ret):
     polyCoeffsKc = np.polyfit(dfKc["sigma"], dfKc["Kc"], polyOrder)
     polyCoeffsKe = np.polyfit(dfKe["sigma"], dfKe["Ke"], polyOrder)
 
-    # Evaluate polynomials
-    Kc, Ke = 0, 0
-    for i in range(polyOrder+1):
-        Kc += polyCoeffsKc[i] * sigma**(polyOrder-i)
-        Ke += polyCoeffsKe[i] * sigma**(polyOrder-i)
+    if interpolationFlag: # If we need second set of polynomials for interpolating between two curves
+        polyCoeffsKc2 = np.polyfit(dfKc2["sigma"], dfKc2["Kc"], polyOrder)
+        polyCoeffsKe2 = np.polyfit(dfKe2["sigma"], dfKe2["Ke"], polyOrder)
+
+        if Ret >= Re2:
+            weightingFactor = (Ret - Re2)/(Remax - Re2)
+        else:
+            weightingFactor = (Ret - Remin)/(Re2 - Remin)
+
+        Kc = (1-weightingFactor)*np.poly1d(polyCoeffsKc)(sigma) + weightingFactor*np.poly1d(polyCoeffsKc2)(sigma)
+        Ke = (1-weightingFactor)*np.poly1d(polyCoeffsKe)(sigma) + weightingFactor*np.poly1d(polyCoeffsKe2)(sigma)
+
+    else:
+        Kc = np.poly1d(polyCoeffsKc)(sigma)
+        Ke = np.poly1d(polyCoeffsKe)(sigma)
 
     return Kc+Ke
 
@@ -173,7 +193,7 @@ class HX:
             print(f"Tube flow area: {self.Attot:.6f} m^2")
             print(f"Tube bulk velocity: {Vt:.2f} m/s")
             print(f"Tube Reynolds number: {Ret:.0f}")
-            print(f"Tube friction factor: {self.fTube:.4f}")
+            print(f"Tube friction factor: {self.fTube:.6f}")
             print(f"Total inlet/exit loss factor: {self.Ktot:.3f}")
             print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"\
                   f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
@@ -248,7 +268,6 @@ class HX:
 
     def thermalAnalysis(self):
         pass
-
 
 class Pump:
     COLD, HOT = range(2)
