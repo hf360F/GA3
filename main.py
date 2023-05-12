@@ -86,29 +86,22 @@ class HX:
         """Heat exchanger design class.
 
         Args:
-            coldStream (dict): Dictionary of cold inlet temperature 'Tci' C, specific
-                               heat capacity 'cp' J/kgK, fluid density 'rho' kg/m^3,
-                               thermal conductivity 'k' W/mK, viscocity 'mu' kg/ms.
+            coldStream (dict): Dictionary of cold inlet temperature 'Tci' C, specific heat capacity 'cp' J/kgK, fluid density 'rho' kg/m^3, thermal conductivity 'k' W/mK, viscocity 'mu' kg/ms.
             hotStream (dict): Dictionary of hot stream properties, as for cold stream.
-
             kt (float): Thermal conducitivty of tube, W/mK.
             epst (float): Effective roughness height of tube, m.
             lt (float): Length of tube section, m.
-            do (float): Tube outer diameter, m
-            di (float): Tube inner diameter, m
+            do (float): Tube outer diameter, m.
+            di (float): Tube inner diameter, m.
             Nt (int): Number of tubes.
             Y (float): Tube pitch, m.
-            isSquare (bool): Are tubes arranged in square pattern, if False tubes are
-                             asssumed to be in triangular pattern.
+            isSquare (bool): Are tubes arranged in square pattern, if False tubes are asssumed to be in triangular pattern.
             Np (int): Number of passes.
-
             Nb (int): Number of baffles.
             B (float): Baffle pich, m.
             G (float): Baffle cut, m.
             ds (float): Shell diameter, m.
-
             dn (float): Nozzle diameter for both streams, m.
-
         """
 
         self.coldStream = coldStream
@@ -132,45 +125,82 @@ class HX:
         """Perform pressure drop analysis on tube flow path for given mdot.
 
         Args:
-            mdt (float): Tube mass flow rate, kg/s. 
+            mdot (float): Tube mass flow rate, kg/s. 
             verbose (bool): Whether or not to print intermediate values (velocities, areas, etc).       
         """
 
-        # Tube analysis
+        # Tube friction
         self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
-        self.Vt = mdot / (self.coldStream["rho"] * self.Attot)  # Bulk tube velocity, m/s
-        self.Ret = self.coldStream["rho"] * self.Vt * self.di / self.coldStream["mu"]  # Tube Reynolds
+        Vt = mdot / (self.hotStream["rho"] * self.Attot)  # Bulk tube velocity, m/s
+        Ret = self.hotStream["rho"] * Vt * self.di / self.hotStream["mu"]  # Tube Reynolds
 
         # Haaland approximation of Colebrook-White for Darcy friction factor
-        self.fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / self.Ret))) ** (-2)
-        dpTube = self.fTube * (self.lt / self.di) * 0.5 * self.coldStream["rho"] * (self.Vt**2)
+        self.fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
+        dpFric = self.fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt**2)
 
-        # End analysis
-        self.As = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Np / self.As # Note scaling with number of passes Np
+        # End loss
+        self.Apipe = self.ds ** 2 * np.pi / 4
+        self.sigma = self.Attot * self.Np / self.Apipe # Note scaling with number of passes Np
 
         # Look up total loss factor, Kc+Ke, and calculate friction
-        self.Ktot = K(self.sigma, self.Ret)
-        dpEnds = self.Ktot * 0.5 * self.coldStream["rho"] * self.Vt ** 2
+        self.Ktot = K(self.sigma, Ret)
+        dpEnds = self.Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
-        # Nozzle analysis
+        # Nozzle loss
         self.An = self.dn ** 2 * np.pi / 4
-        self.Vn = mdot / (self.coldStream["rho"] * self.An)
-        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * self.Vn ** 2
+        Vn = mdot / (self.hotStream["rho"] * self.An)
+        dpNozzles = 2 * 0.5 * self.hotStream["rho"] * (Vn**2)
 
-        tubeTotaldP = dpTube + dpEnds + dpNozzles
+        tubeTotaldP = dpFric + dpEnds + dpNozzles
 
         if verbose:
             print(f"\nTUBE HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
             print(f"Tube flow area: {self.Attot:.6f} m^2")
-            print(f"Tube bulk velocity: {self.Vt:.2f} m/s")
-            print(f"Tube Reynolds number: {self.Ret:.0f}")
+            print(f"Tube bulk velocity: {Vt:.2f} m/s")
+            print(f"Tube Reynolds number: {Ret:.0f}")
             print(f"Tube friction factor: {self.fTube:.4f}")
             print(f"Total inlet/exit loss factor: {self.Ktot:.3f}")
-            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (tube {dpTube:.0f},"\
+            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"\
                   f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
             
         return tubeTotaldP 
+
+    def hydraulicAnalysisShell(self, mdot, verbose=False):
+        """Perform pressure drop analysis on shell flow path for given mdot.
+
+        Args:
+            mdot (float): Shell mass flow rate, kg/s. 
+            verbose (bool): Whether or not to print intermediate values (velocities, areas, etc).       
+        """
+        
+        # Shell loss
+        self.As = self.ds*(self.Y - self.do)*self.B/self.Y # Approximation of shell flow area
+        Vs = mdot/(self.coldStream["rho"]*self.As)
+
+        self.dseff = self.ds*(self.As/self.Apipe)
+        Res = self.coldStream["rho"]*Vs*self.dseff/self.coldStream["mu"]
+
+        if self.isSquare:
+            a = 0.34
+        else:
+            a = 0.2
+        
+        shelldp1 = 4*a*(Res**(-0.15))*self.Nt*self.coldStream["rho"]*(Vs**2)
+
+        # Nozzle loss
+        self.An = self.dn ** 2 * np.pi / 4
+        Vn = mdot / (self.hotStream["rho"] * self.An)
+        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * (Vn**2)
+
+        shellTotaldp = shelldp1 + dpNozzles
+
+        if verbose:
+            print(f"\nSHELL HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
+            print(f"Shell flow area: {self.As:.6f} m^2")
+            print(f"Shell characteristic velocity: {Vs:.2f} m/s")
+            print(f"Shell Reynolds number: {Res:.0f}")
+            print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"\
+                  f"  nozzles {dpNozzles:.0f})\n")
 
     def thermalAnalysis(self):
         pass
