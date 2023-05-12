@@ -1,4 +1,7 @@
 import main as ga3
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import minimize_scalar
 
 # INLET FLUID PROPERTIES
 coldStream = {"Tci": 20,  # C
@@ -40,3 +43,8 @@ G = 0.2*ds # Baffle cut, m NOT YET USED
 HXtest = ga3.HX(coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, B, G, ds, dn)
 HXtest.hydraulicAnalysisTube(mdot=0.45, verbose=True) # Worked example tube pressure drop 4360 Pa
 HXtest.hydraulicAnalysisShell(mdot=0.50, verbose=True) # Worked example shell pressure drop 3700 Pa
+
+HXtest.plotHXChics()
+
+print(ga3.chicSolver(HXtest, ga3.Pump(ga3.Pump.HOT)))
+print(ga3.chicSolver(HXtest, ga3.Pump(ga3.Pump.COLD)))

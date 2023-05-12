@@ -8,28 +8,15 @@ Compressor characteristics fixed (see csv)
 Cold stream inlet fixed as 20 C
 Hot stream inlet fixed as 60 C
 """
+
 from typing import Union
+from scipy.optimize import minimize_scalar
 
 import pandas as pd
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import warnings
-
-# Inlet properties
-coldStream = {"Tci": 20,  # C
-              "cp": 4179,  # J/kgK
-              "rho": 990.1,  # kg/m^3
-              "k": 0.632,  # W/mK
-              "mu": 6.51E-4  # kg/ms
-              }
-
-hotStream = {"Tci": 60,  # C
-             "cp": 4179,  # J/kgK
-             "rho": 990.1,  # kg/m^3
-             "k": 0.632,  # W/mK
-             "mu": 6.51E-4  # kg/ms
-             }
 
 def K(sigma, Ret):
     """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
@@ -80,6 +67,34 @@ def K(sigma, Ret):
 
     return Kc+Ke
 
+def chicSolver(HX, pump):
+    """Find intersection of pump and HX characteristic to set operating point.
+    The HX flow path to use is inferred from pump.pump_type.
+    
+    Args:
+        HX (HX object): Heat exchanger design.
+        pump (Pump object): Pump design.
+
+    Returns:
+        (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
+    """  
+
+    if pump.pump_type is pump.HOT:
+        rho = HX.hotStream["rho"]
+        # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
+        def f(mdot):
+            return abs(HX.hydraulicAnalysisTube(mdot) - pump.dp(mdot/rho)) # Note Pump.dp takes volumetric flow rate
+    else:
+        rho = HX.coldStream["rho"]
+        def f(mdot):
+            return abs(HX.hydraulicAnalysisShell(mdot) - pump.dp(mdot/rho))
+        
+    solution = minimize_scalar(f, bounds=[0, 1])
+
+    if solution["success"] is False:
+        raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
+    else:
+        return (solution["x"], pump.dp(solution["x"]/rho))
 
 class HX:
     def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, B, G, ds, dn):
@@ -202,6 +217,35 @@ class HX:
             print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"\
                   f"  nozzles {dpNozzles:.0f})\n")
 
+        return shellTotaldp
+
+    def plotHXChics(self, mdotMin=0, mdotMax=1, n=100):
+        """Plot HX flow characteristics.
+
+        Args:
+            mdotMin (float): Minimum mass flow to evaluate pressure drop at, kg/s.
+            mdotMax (float): Maximum mass flow to evaluate pressure drop at, kg/s.
+            n (int): Number of mass flow rates to evaluate between mdotMin and mdotMax.
+        """
+
+        mdots = np.linspace(mdotMin, mdotMax, n+1)
+        dpsTube, dpsShell = np.zeros_like(mdots), np.zeros_like(mdots)
+
+        for i in range(n+1):
+            dpsTube[i] = self.hydraulicAnalysisTube(mdot=mdots[i])
+            dpsShell[i] = self.hydraulicAnalysisShell(mdot=mdots[i])
+        
+        plt.plot(mdots, dpsTube/1000, label="Tube flow path", color="red")
+        plt.plot(mdots, dpsShell/1000, label="Shell flow path", color="blue")
+        plt.xlim(mdotMin, mdotMax)
+        plt.ylim(0)
+        plt.xlabel("Mass flow rate, $kg/s$")
+        plt.ylabel("Pressure drop, $kPa$")
+        plt.title("Heat exchanger characteristics")
+        plt.legend()
+        plt.grid()
+        plt.show()
+
     def thermalAnalysis(self):
         pass
 
@@ -224,9 +268,11 @@ class Pump:
                 raise "invalid pump type"
 
         data = np.genfromtxt(f"data/{type_str}.csv", delimiter=',')
-        self.flowrate_data = data[:, 0]
+        self.flowrate_data = data[:, 0]       
+        self.flowMin = np.min(data[:, 0])
+        self.flowMax = np.max(data[:, 0])
         self.dp_data = data[:, 1]
-        self.poly = np.poly1d(np.polyfit(self.flowrate_data, self.dp_data, 2))
+        self.poly = np.poly1d(np.polyfit(self.flowrate_data, self.dp_data, 3))
 
     def dp(self, flowrate: np.ndarray | float) -> np.ndarray | float:
         """
@@ -235,5 +281,9 @@ class Pump:
         :param flowrate: The required flowrate, m^3/s
         :return: The total pressure rise, Pa.
         """
+
+        if (flowrate > self.flowMax) or (flowrate < self.flowMin):
+            raise ValueError(f"Flowrate {flowrate:.5f} m^3/s lies outside of "\
+                             f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
 
         return np.clip(self.poly(flowrate), 0, None)
