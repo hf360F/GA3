@@ -109,11 +109,11 @@ def chicSolver(hx, pump):
         hx_dp = hx.hydraulicAnalysisShell
 
     def f(mdot):
-        return abs(hx_dp(mdot) - pump.dp(mdot / rho))
+        return hx_dp(mdot) - pump.dp(mdot / rho)
 
-    solution = root_scalar(f, bracket=[0, 1])
+    solution = root_scalar(f, bracket=[0.001, 1])
 
-    if not solution["success"]:
+    if not solution.converged:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
     else:
         return solution.root, pump.dp(solution.root / rho)
@@ -325,7 +325,6 @@ class HX:
         print(f'Tho: {Tho}, Tco: {Tco}')
 
         Q = HA * LMTD(Tho, Tco)
-        print(f'Q: {Q}')
 
         return Q
 
@@ -363,7 +362,7 @@ class Pump:
         """
 
         if (flowrate > self.flowMax) or (flowrate < self.flowMin):
-            raise ValueError(f"Flowrate {flowrate:.5f} m^3/s lies outside of " \
-                             f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
+            warnings.warn(f"Flowrate {flowrate:.5f} m^3/s lies outside of "
+                          f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
 
         return np.clip(self.poly(flowrate), 0, None)
