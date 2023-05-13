@@ -14,8 +14,7 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy.optimize
-from scipy.optimize import root_scalar
+from scipy.optimize import least_squares, root_scalar
 
 
 def K(sigma, Ret):
@@ -117,7 +116,7 @@ def chicSolver(hx, pump):
     if not solution["success"]:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
     else:
-        return solution["x"], pump.dp(solution["x"] / rho)
+        return solution.root, pump.dp(solution.root / rho)
 
 
 class HX:
@@ -125,7 +124,8 @@ class HX:
         """Heat exchanger design class.
 
         Args:
-            coldStream (dict): Dictionary of cold inlet temperature 'Tci' C, specific heat capacity 'cp' J/kgK, fluid density 'rho' kg/m^3, thermal conductivity 'k' W/mK, viscocity 'mu' kg/ms.
+            coldStream (dict): Dictionary of cold inlet temperature 'Ti' C, specific heat capacity 'cp' J/kgK,
+                fluid density 'rho' kg/m^3, thermal conductivity 'k' W/mK, viscocity 'mu' kg/ms.
             hotStream (dict): Dictionary of hot stream properties, as for cold stream.
             kt (float): Thermal conducitivty of tube, W/mK.
             epst (float): Effective roughness height of tube, m.
@@ -164,6 +164,9 @@ class HX:
         self.Apipe = self.ds ** 2 * np.pi / 4
         self.sigma = self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
         self.An = self.dn ** 2 * np.pi / 4
+        self.F = 1
+        if Np != 1:
+            raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -197,7 +200,7 @@ class HX:
             print(f"Tube Reynolds number: {Ret:.0f}")
             print(f"Tube friction factor: {fTube:.6f}")
             print(f"Total inlet/exit loss factor: {Ktot:.3f}")
-            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f}," \
+            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"
                   f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
 
         return tubeTotaldP
@@ -236,7 +239,7 @@ class HX:
             print(f"Shell flow area: {self.As:.6f} m^2")
             print(f"Shell characteristic velocity: {Vs:.2f} m/s")
             print(f"Shell Reynolds number: {Res:.0f}")
-            print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f}," \
+            print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"
                   f"  nozzles {dpNozzles:.0f})\n")
 
         return shellTotaldp
@@ -268,8 +271,63 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self):
-        pass
+    def thermalAnalysis(self, mdot_t, mdot_s):
+        """
+        Perform thermal analysis on the HX given the 2 mass flowrates.
+
+        Args:
+            mdot_t: Tube mass flow, kg/s.
+            mdot_s: Shell mass flow rate, kg/s
+
+        Returns:
+            Q: Resultant heat transfer rate, W.
+        """
+        # Reynolds numbers
+        Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
+        Res = mdot_s * self.ds * (self.As / self.Apipe) / self.As / self.coldStream["mu"]
+
+        # Pr and geometry constant are const
+        Pr = 4.31
+        c = 0.15 if self.isSquare else 0.2
+
+        # Nusselt number correlations
+        Nut = 0.023 * Ret ** 0.8 * Pr ** 0.3
+        Nus = c * Res ** 0.6 * Pr ** 0.3
+
+        # convection ht coeffs
+        hi = Nut * self.hotStream["k"] / self.di
+        ho = Nus * self.coldStream["k"] / self.do
+
+        # total ht coeff
+        H = 1 / (1 / hi + self.di * np.log(self.do / self.di) / 2 / self.kt + self.di / self.do / ho)
+        # H = 9878
+
+        # inlet temps
+        Thi = self.hotStream["Ti"]
+        Tci = self.coldStream["Ti"]
+
+        # SFEE
+        HA = H * np.pi * self.di * self.lt * self.Nt
+
+        def LMTD(Tho_, Tco_):
+            T1 = Thi - Tco_
+            T2 = Tho_ - Tci
+            if np.isclose(T1, T2):
+                return T1
+            else:
+                return (T1 - T2) / np.log(T1 / T2)
+
+        def f(To):
+            Q = HA * LMTD(To[0], To[1]) * self.F
+            return mdot_t * self.hotStream["cp"] * (Thi - To[0]) - Q, mdot_s * self.coldStream["cp"] * (To[1] - Tci) - Q
+
+        Tho, Tco = least_squares(f, np.array([40, 30]), bounds=([Tci, Tci], [Thi, Thi])).x
+        print(f'Tho: {Tho}, Tco: {Tco}')
+
+        Q = HA * LMTD(Tho, Tco)
+        print(f'Q: {Q}')
+
+        return Q
 
 
 class Pump:
