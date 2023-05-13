@@ -9,18 +9,18 @@ Cold stream inlet fixed as 20 C
 Hot stream inlet fixed as 60 C
 """
 
-from typing import Union
-from scipy.optimize import minimize_scalar
-
-import pandas as pd
-import numpy as np
-import scipy as sp
-import matplotlib.pyplot as plt
 import warnings
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy.optimize
+from scipy.optimize import root_scalar
+
 
 def K(sigma, Ret):
     """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
-       Will warn for out of range Reynolds number, but match to closest curve.
+       Will warn for out of range Reynolds number, but match to the closest curve.
 
     Args:
         sigma (float): Ratio of total tube area to shell area.
@@ -41,7 +41,7 @@ def K(sigma, Ret):
 
     if Ret > Remax:
         dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
-        dfKe = dfKe3 = pd.read_csv("data/Turb_10000_Ke.csv")
+        dfKe = pd.read_csv("data/Turb_10000_Ke.csv")
         warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remax = {Remax:.2f}), matching to closest curve.")
 
     elif Ret > Re2:
@@ -50,7 +50,7 @@ def K(sigma, Ret):
         dfKe = pd.read_csv("data/Turb_5000_Ke.csv")
         dfKe2 = pd.read_csv("data/Turb_10000_Ke.csv")
 
-        interpolationFlag = False # Can interpolate between two curves of different Re
+        interpolationFlag = False  # Can interpolate between two curves of different Re
 
     elif Ret >= Remin:
         dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
@@ -62,59 +62,63 @@ def K(sigma, Ret):
 
     else:
         dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
-        dfKe = dfKe3 = pd.read_csv("data/Turb_3000_Ke.csv")
+        dfKe = pd.read_csv("data/Turb_3000_Ke.csv")
         warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remin = {Remin:.2f}), matching to closest curve.")
-  
+
     # Fit polynomials to digitised data
     polyCoeffsKc = np.polyfit(dfKc["sigma"], dfKc["Kc"], polyOrder)
     polyCoeffsKe = np.polyfit(dfKe["sigma"], dfKe["Ke"], polyOrder)
 
-    if interpolationFlag: # If we need second set of polynomials for interpolating between two curves
+    if interpolationFlag:  # If we need second set of polynomials for interpolating between two curves
         polyCoeffsKc2 = np.polyfit(dfKc2["sigma"], dfKc2["Kc"], polyOrder)
         polyCoeffsKe2 = np.polyfit(dfKe2["sigma"], dfKe2["Ke"], polyOrder)
 
         if Ret >= Re2:
-            weightingFactor = (Ret - Re2)/(Remax - Re2)
+            weightingFactor = (Ret - Re2) / (Remax - Re2)
         else:
-            weightingFactor = (Ret - Remin)/(Re2 - Remin)
+            weightingFactor = (Ret - Remin) / (Re2 - Remin)
 
-        Kc = (1-weightingFactor)*np.poly1d(polyCoeffsKc)(sigma) + weightingFactor*np.poly1d(polyCoeffsKc2)(sigma)
-        Ke = (1-weightingFactor)*np.poly1d(polyCoeffsKe)(sigma) + weightingFactor*np.poly1d(polyCoeffsKe2)(sigma)
+        Kc = (1 - weightingFactor) * np.poly1d(polyCoeffsKc)(sigma) + weightingFactor * np.poly1d(polyCoeffsKc2)(sigma)
+        Ke = (1 - weightingFactor) * np.poly1d(polyCoeffsKe)(sigma) + weightingFactor * np.poly1d(polyCoeffsKe2)(sigma)
 
     else:
         Kc = np.poly1d(polyCoeffsKc)(sigma)
         Ke = np.poly1d(polyCoeffsKe)(sigma)
 
-    return Kc+Ke
+    return Kc + Ke
 
-def chicSolver(HX, pump):
+
+def chicSolver(hx, pump):
     """Find intersection of pump and HX characteristic to set operating point.
     The HX flow path to use is inferred from pump.pump_type.
     
     Args:
-        HX (HX object): Heat exchanger design.
+        hx (HX object): Heat exchanger design.
         pump (Pump object): Pump design.
 
     Returns:
         (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
-    """  
+    """
 
-    if pump.pump_type is pump.HOT:
-        rho = HX.hotStream["rho"]
+    if pump.pump_type is Pump.HOT:
+        rho = hx.hotStream["rho"]
+        hx_dp = hx.hydraulicAnalysisTube
+
         # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
-        def f(mdot):
-            return abs(HX.hydraulicAnalysisTube(mdot) - pump.dp(mdot/rho)) # Note Pump.dp takes volumetric flow rate
     else:
-        rho = HX.coldStream["rho"]
-        def f(mdot):
-            return abs(HX.hydraulicAnalysisShell(mdot) - pump.dp(mdot/rho))
-        
-    solution = minimize_scalar(f, bounds=[0, 1])
+        rho = hx.coldStream["rho"]
+        hx_dp = hx.hydraulicAnalysisShell
 
-    if solution["success"] is False:
+    def f(mdot):
+        return abs(hx_dp(mdot) - pump.dp(mdot / rho))
+
+    solution = root_scalar(f, bracket=[0, 1])
+
+    if not solution["success"]:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
     else:
-        return (solution["x"], pump.dp(solution["x"]/rho))
+        return solution["x"], pump.dp(solution["x"] / rho)
+
 
 class HX:
     def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, B, G, ds, dn):
@@ -154,7 +158,12 @@ class HX:
         self.B = B
         self.G = G
         self.ds = ds
-        self.dn = dn  
+        self.dn = dn
+
+        self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
+        self.Apipe = self.ds ** 2 * np.pi / 4
+        self.sigma = self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
+        self.An = self.dn ** 2 * np.pi / 4
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -164,27 +173,20 @@ class HX:
             verbose (bool): Whether or not to print intermediate values (velocities, areas, etc).       
         """
 
-        # Tube friction
-        self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
         Vt = mdot / (self.hotStream["rho"] * self.Attot)  # Bulk tube velocity, m/s
         Ret = self.hotStream["rho"] * Vt * self.di / self.hotStream["mu"]  # Tube Reynolds
 
-        # Haaland approximation of Colebrook-White for Darcy friction factor
-        self.fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
-        dpFric = self.fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt**2)
+        # Haaland's approximation of Colebrook-White for Darcy friction factor
+        fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
+        dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
-        # End loss
-        self.Apipe = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Np / self.Apipe # Note scaling with number of passes Np
-
-        # Look up total loss factor, Kc+Ke, and calculate friction
-        self.Ktot = K(self.sigma, Ret)
-        dpEnds = self.Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
+        # Look up total loss factor, and calculate friction
+        Ktot = K(self.sigma, Ret)
+        dpEnds = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
         # Nozzle loss
-        self.An = self.dn ** 2 * np.pi / 4
         Vn = mdot / (self.hotStream["rho"] * self.An)
-        dpNozzles = 2 * 0.5 * self.hotStream["rho"] * (Vn**2)
+        dpNozzles = 2 * 0.5 * self.hotStream["rho"] * (Vn ** 2)
 
         tubeTotaldP = dpFric + dpEnds + dpNozzles
 
@@ -193,12 +195,12 @@ class HX:
             print(f"Tube flow area: {self.Attot:.6f} m^2")
             print(f"Tube bulk velocity: {Vt:.2f} m/s")
             print(f"Tube Reynolds number: {Ret:.0f}")
-            print(f"Tube friction factor: {self.fTube:.6f}")
-            print(f"Total inlet/exit loss factor: {self.Ktot:.3f}")
-            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"\
+            print(f"Tube friction factor: {fTube:.6f}")
+            print(f"Total inlet/exit loss factor: {Ktot:.3f}")
+            print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f}," \
                   f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
-            
-        return tubeTotaldP 
+
+        return tubeTotaldP
 
     def hydraulicAnalysisShell(self, mdot, verbose=False):
         """Perform pressure drop analysis on shell flow path for given mdot.
@@ -207,25 +209,25 @@ class HX:
             mdot (float): Shell mass flow rate, kg/s. 
             verbose (bool): Whether or not to print intermediate values (velocities, areas, etc).       
         """
-        
-        # Shell loss
-        self.As = self.ds*(self.Y - self.do)*self.B/self.Y # Approximation of shell flow area
-        Vs = mdot/(self.coldStream["rho"]*self.As)
 
-        self.dseff = self.ds*(self.As/self.Apipe)
-        Res = self.coldStream["rho"]*Vs*self.dseff/self.coldStream["mu"]
+        # Shell loss
+        self.As = self.ds * (self.Y - self.do) * self.B / self.Y  # Approximation of shell flow area
+        Vs = mdot / (self.coldStream["rho"] * self.As)
+
+        self.dseff = self.ds * (self.As / self.Apipe)
+        Res = self.coldStream["rho"] * Vs * self.dseff / self.coldStream["mu"]
 
         if self.isSquare:
             a = 0.34
         else:
             a = 0.2
-        
-        shelldp1 = 4*a*(Res**(-0.15))*self.Nt*self.coldStream["rho"]*(Vs**2)
+
+        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.coldStream["rho"] * (Vs ** 2)
 
         # Nozzle loss
         self.An = self.dn ** 2 * np.pi / 4
         Vn = mdot / (self.hotStream["rho"] * self.An)
-        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * (Vn**2)
+        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * (Vn ** 2)
 
         shellTotaldp = shelldp1 + dpNozzles
 
@@ -234,7 +236,7 @@ class HX:
             print(f"Shell flow area: {self.As:.6f} m^2")
             print(f"Shell characteristic velocity: {Vs:.2f} m/s")
             print(f"Shell Reynolds number: {Res:.0f}")
-            print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"\
+            print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f}," \
                   f"  nozzles {dpNozzles:.0f})\n")
 
         return shellTotaldp
@@ -248,15 +250,15 @@ class HX:
             n (int): Number of mass flow rates to evaluate between mdotMin and mdotMax.
         """
 
-        mdots = np.linspace(mdotMin, mdotMax, n+1)
+        mdots = np.linspace(mdotMin, mdotMax, n + 1)
         dpsTube, dpsShell = np.zeros_like(mdots), np.zeros_like(mdots)
 
-        for i in range(n+1):
+        for i in range(n + 1):
             dpsTube[i] = self.hydraulicAnalysisTube(mdot=mdots[i])
             dpsShell[i] = self.hydraulicAnalysisShell(mdot=mdots[i])
-        
-        plt.plot(mdots, dpsTube/1000, label="Tube flow path", color="red")
-        plt.plot(mdots, dpsShell/1000, label="Shell flow path", color="blue")
+
+        plt.plot(mdots, dpsTube / 1000, label="Tube flow path", color="red")
+        plt.plot(mdots, dpsShell / 1000, label="Shell flow path", color="blue")
         plt.xlim(mdotMin, mdotMax)
         plt.ylim(0)
         plt.xlabel("Mass flow rate, $kg/s$")
@@ -268,6 +270,7 @@ class HX:
 
     def thermalAnalysis(self):
         pass
+
 
 class Pump:
     COLD, HOT = range(2)
@@ -287,7 +290,7 @@ class Pump:
                 raise "invalid pump type"
 
         data = np.genfromtxt(f"data/{type_str}.csv", delimiter=',')
-        self.flowrate_data = data[:, 0]       
+        self.flowrate_data = data[:, 0]
         self.flowMin = np.min(data[:, 0])
         self.flowMax = np.max(data[:, 0])
         self.dp_data = data[:, 1]
@@ -302,7 +305,7 @@ class Pump:
         """
 
         if (flowrate > self.flowMax) or (flowrate < self.flowMin):
-            raise ValueError(f"Flowrate {flowrate:.5f} m^3/s lies outside of "\
+            raise ValueError(f"Flowrate {flowrate:.5f} m^3/s lies outside of " \
                              f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
 
         return np.clip(self.poly(flowrate), 0, None)
