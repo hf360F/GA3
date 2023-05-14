@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-from scipy.optimize import least_squares, root, root_scalar
+from scipy.optimize import least_squares, root
 
 
 def K_2d_interp(sigma, Ret):
@@ -125,7 +125,7 @@ def chicSolver(hx, pump):
     def f(mdot):
         return hx_dp(mdot) - pump.dp(mdot / rho)
 
-    solution = root(f,x0=0.2*np.ones(len(hx.Nt)))
+    solution = root(f, x0=0.2 * np.ones(len(hx.Nt)))
 
     if not solution.success:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
@@ -317,8 +317,8 @@ class HX:
         # H = 9878
 
         # inlet temps
-        Thi = self.hotStream["Ti"]
-        Tci = self.coldStream["Ti"]
+        Thi = self.hotStream["Ti"] * np.ones_like(mdot_t)
+        Tci = self.coldStream["Ti"] * np.ones_like(mdot_s)
 
         # SFEE
         HA = H * np.pi * self.di * self.lt * self.Nt
@@ -326,20 +326,23 @@ class HX:
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
             T2 = Tho_ - Tci
-            if np.isclose(T1, T2):
-                return T1
-            else:
-                return (T1 - T2) / np.log(T1 / T2)
+            mask = np.isclose(T1, T2)
+            return mask * T1 + (1 - mask) * (T1 - T2) / np.log(T1 / T2)
 
         def f(To):
-            Q = HA * LMTD(To[0], To[1]) * self.F
-            return np.concatenate((mdot_t* self.hotStream["cp"] * (Thi - To[0]) - Q ,mdot_s * self.coldStream["cp"] * (To[1] - Tci) - Q))
+            Tho, Tco = np.split(To, 2)
+            Q = HA * LMTD(Tho, Tco) * self.F
+            return np.concatenate(
+                (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
-        print(f([40,30])) # dimensions
+        x0 = np.concatenate((40 * np.ones_like(mdot_s), 30 * np.ones_like(mdot_s)))
 
-        Tho, Tco = least_squares(f, np.array([40, 30]), bounds=([Tci, Tci], [Thi, Thi])).x
+        res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi,2)))
+        Tho, Tco = np.split(res.x,2)
         print(f'Tho: {Tho}\n'
               f'Tco: {Tco}')
+
+        print(res)
 
         Q = HA * LMTD(Tho, Tco)
 
