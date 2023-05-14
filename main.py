@@ -17,6 +17,13 @@ import pandas as pd
 from scipy.optimize import least_squares, root_scalar
 
 
+def Y(d_small, d_large, n):
+    # number of smaller circles on a pitch circle is proportional to pcd.
+    # there may be up to 4 pitch circles
+    pcd_max = d_large - d_small
+    pcd_min = d_small
+    # 1/sin(pi/n) is
+
 def K(sigma, Ret):
     """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
        Will warn for out of range Reynolds number, but match to the closest curve.
@@ -322,7 +329,8 @@ class HX:
             return mdot_t * self.hotStream["cp"] * (Thi - To[0]) - Q, mdot_s * self.coldStream["cp"] * (To[1] - Tci) - Q
 
         Tho, Tco = least_squares(f, np.array([40, 30]), bounds=([Tci, Tci], [Thi, Thi])).x
-        print(f'Tho: {Tho}, Tco: {Tco}')
+        print(f'Tho: {Tho}\n'
+              f'Tco: {Tco}')
 
         Q = HA * LMTD(Tho, Tco)
 

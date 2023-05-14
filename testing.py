@@ -26,3 +26,5 @@ print(f'Q: {Q}\n'
       f'dp_h: {dp_h}\n'
       f'dp_c: {dp_c}\n')
 
+HXtest.plotHXChics()
+
