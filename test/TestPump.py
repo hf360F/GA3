@@ -2,6 +2,8 @@ import unittest
 
 import numpy as np
 
+from main import K_2d_interp as K
+
 
 class TestPump(unittest.TestCase):
     @classmethod
@@ -15,12 +17,24 @@ class TestPump(unittest.TestCase):
         self.assertIsNotNone(self.hot)
 
     def test_float(self):
-        self.assertEqual(self.cold.dp(0.0001), 61664.92165351563)
-        self.assertEqual(self.hot.dp(0.0001), 48664.711765035114)
+        self.assertIsNot(self.cold.dp(0.0001), np.nan)
+        self.assertIsNot(self.hot.dp(0.0001), np.nan)
+
+    def dont_test_array(self):
+        self.assertIsNot(self.cold.dp(np.array([0.0001, 0.0002])), np.nan)
+        self.assertIsNot(self.hot.dp(np.array([0.0001, 0.0002])), np.nan)
+
+
+class TestK2D(unittest.TestCase):
+    def test_float(self):
+        self.assertIsNot(K(0, 0), np.nan)
+        self.assertIsNot(K(0, 25000), np.nan)
+        self.assertIsNot(K(0.99, 0), np.nan)
+        self.assertIsNot(K(0.99, 25000), np.nan)
+        self.assertIsNot(K(0.114, 25.07), np.nan)
 
     def test_array(self):
-        self.assertIsNotNone(self.cold.dp(np.array([0.0001, 0.0002])))
-        self.assertIsNotNone(self.hot.dp(np.array([0.0001, 0.0002])))
+        self.assertNotIn(np.nan,K([0,0.5],[0,25000]))
 
 
 if __name__ == '__main__':

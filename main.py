@@ -14,15 +14,22 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.optimize import least_squares, root_scalar
+import scipy
+from scipy.optimize import least_squares, root, root_scalar
 
 
-def Y(d_small, d_large, n):
-    # number of smaller circles on a pitch circle is proportional to pcd.
-    # there may be up to 4 pitch circles
-    pcd_max = d_large - d_small
-    pcd_min = d_small
-    # 1/sin(pi/n) is
+def K_2d_interp(sigma, Ret):
+    dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
+    dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
+
+    Ret = np.clip(Ret, 3000, 10000)
+    sigma = np.clip(sigma, 0, 1)
+
+    Kc = scipy.interpolate.griddata(dfKc[:, :-1], dfKc[:, -1], np.column_stack((Ret, sigma)), 'cubic')
+    Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
+
+    return Kc + Ke
+
 
 def K(sigma, Ret):
     """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
@@ -118,12 +125,12 @@ def chicSolver(hx, pump):
     def f(mdot):
         return hx_dp(mdot) - pump.dp(mdot / rho)
 
-    solution = root_scalar(f, bracket=[0.001, 1])
+    solution = root(f,x0=0.2*np.ones(len(hx.Nt)))
 
-    if not solution.converged:
+    if not solution.success:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
     else:
-        return solution.root, pump.dp(solution.root / rho)
+        return solution.x, pump.dp(solution.x / rho)
 
 
 class HX:
@@ -136,11 +143,11 @@ class HX:
             hotStream (dict): Dictionary of hot stream properties, as for cold stream.
             kt (float): Thermal conducitivty of tube, W/mK.
             epst (float): Effective roughness height of tube, m.
-            lt (float): Length of tube section, m.
+            lt (float|ndarray): Length of tube section, m.
             do (float): Tube outer diameter, m.
             di (float): Tube inner diameter, m.
-            Nt (int): Number of tubes.
-            Y (float): Tube pitch, m.
+            Nt (int|ndarray): Number of tubes.
+            Y (float|ndarray): Tube pitch, m.
             isSquare (bool): Are tubes arranged in square pattern, if False tubes are asssumed to be in triangular pattern.
             Np (int): Number of passes.
             Nb (int): Number of baffles.
@@ -191,7 +198,7 @@ class HX:
         dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Look up total loss factor, and calculate friction
-        Ktot = K(self.sigma, Ret)
+        Ktot = K_2d_interp(self.sigma, Ret)
         dpEnds = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
         # Nozzle loss
@@ -326,7 +333,9 @@ class HX:
 
         def f(To):
             Q = HA * LMTD(To[0], To[1]) * self.F
-            return mdot_t * self.hotStream["cp"] * (Thi - To[0]) - Q, mdot_s * self.coldStream["cp"] * (To[1] - Tci) - Q
+            return np.concatenate((mdot_t* self.hotStream["cp"] * (Thi - To[0]) - Q ,mdot_s * self.coldStream["cp"] * (To[1] - Tci) - Q))
+
+        print(f([40,30])) # dimensions
 
         Tho, Tco = least_squares(f, np.array([40, 30]), bounds=([Tci, Tci], [Thi, Thi])).x
         print(f'Tho: {Tho}\n'
@@ -369,8 +378,8 @@ class Pump:
         :return: The total pressure rise, Pa.
         """
 
-        if (flowrate > self.flowMax) or (flowrate < self.flowMin):
-            warnings.warn(f"Flowrate {flowrate:.5f} m^3/s lies outside of "
-                          f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
+        # if (flowrate > self.flowMax) or (flowrate < self.flowMin):
+        #     warnings.warn(f"Flowrate {flowrate:.5f} m^3/s lies outside of "
+        #                   f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
 
         return np.clip(self.poly(flowrate), 0, None)
