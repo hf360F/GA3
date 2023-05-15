@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-from scipy.optimize import least_squares, root
+from scipy.optimize import root
 
 
 def K(sigma, Ret):
@@ -74,8 +74,8 @@ class HX:
             lt (float|ndarray): Length of tube section, m.
             do (float): Tube outer diameter, m.
             di (float): Tube inner diameter, m.
-            Nt (int|ndarray): Number of tubes.
-            Y (float|ndarray): Tube pitch, m.
+            Nt (int): Number of tubes.
+            Y (float): Tube pitch, m.
             isSquare (bool): Are tubes arranged in square pattern, if False tubes are asssumed to be in triangular pattern.
             Np (int): Number of passes.
             Nb (int): Number of baffles.
@@ -99,8 +99,7 @@ class HX:
         self.G = G
         self.ds = ds
         self.dn = dn
-        self.variable = np.ones(1)
-        self.F=0.9
+        self.F = 0.9
 
         if Np != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
@@ -124,6 +123,14 @@ class HX:
     @property
     def B(self):
         return self.lt / (self.Nb + 1)
+
+    @property
+    def As(self):
+        return self.ds * (self.Y - self.do) * self.B / self.Y  # Approximation of shell flow area
+
+    @property
+    def dseff(self):
+        return self.ds * (self.As / self.Apipe)
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -171,10 +178,8 @@ class HX:
         """
 
         # Shell loss
-        self.As = self.ds * (self.Y - self.do) * self.B / self.Y  # Approximation of shell flow area
         Vs = mdot / (self.coldStream["rho"] * self.As)
 
-        self.dseff = self.ds * (self.As / self.Apipe)
         Res = self.coldStream["rho"] * Vs * self.dseff / self.coldStream["mu"]
 
         a = 0.34 if self.isSquare else 0.2
@@ -224,16 +229,16 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self, mdot_t: float | np.ndarray, mdot_s: float | np.ndarray) -> float | np.ndarray:
+    def thermalAnalysis(self, mdot_t: float, mdot_s: float) -> float:
         """
         Perform thermal analysis on the HX given the 2 mass flowrates.
 
         Args:
-            mdot_t (float|np.ndarray): Tube mass flow, kg/s.
-            mdot_s (float|np.ndarray): Shell mass flow, kg/s
+            mdot_t (float): Tube mass flow, kg/s.
+            mdot_s (float): Shell mass flow, kg/s
 
         Returns:
-            Q (float|np.ndarray): Resultant heat transfer rate, W.
+            Q (float): Resultant heat transfer rate, W.
         """
         # Reynolds numbers
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
@@ -256,8 +261,8 @@ class HX:
         # H = 9878
 
         # inlet temps
-        Thi = self.hotStream["Ti"] * np.ones_like(mdot_t)
-        Tci = self.coldStream["Ti"] * np.ones_like(mdot_s)
+        Thi = self.hotStream["Ti"]
+        Tci = self.coldStream["Ti"]
 
         # SFEE
         HA = H * np.pi * self.di * self.lt * self.Nt
@@ -265,34 +270,32 @@ class HX:
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
             T2 = Tho_ - Tci
-            return np.where(np.isclose(T1, T2), T1, (T1 - T2) / np.log(T1 / T2))
+            return T1 if np.isclose(T1, T2) else (T1 - T2) / np.log(T1 / T2)
 
         # error function for LMTD solver
         def f(To: np.ndarray):
             """
-            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT. Input vector is concatenation of estimates of Tho
-            then Tco.
+            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT
 
             Args:
-                To (np.ndarray): Array containing estimates of Tho and Tco, with shape (2n,), n number of configurations
+                To (np.ndarray): [Tho, Tco]
 
             Returns:
-                dQ (float|np.ndarray): Array of errors in Q between 2 methods, of same shape as input vector (2n,)
+                dQ (ndarray): [dQ1,dQ2]
 
             """
-            Tho, Tco = np.split(To, 2)
+            Tho, Tco = To
             Q = HA * LMTD(Tho, Tco) * self.F
             return np.concatenate(
                 (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
         # initial guess of outlet temperatures
-        x0 = np.repeat([40, 30], mdot_s.shape[0])
-        # least squares solver sets errors to zero, optimising for outlet temperatures
-        res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi, 2)))
-        if res.optimality > 1e-3:
-            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
+        x0 = np.array([40, 30])  # least squares solver sets errors to zero, optimising for outlet temperatures
+        res = root(f, x0)
+        if not res.success:
+            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer")
         # recover vectors of outlet temperatures
-        Tho, Tco = np.split(res.x, 2)
+        Tho, Tco = res.x
 
         Q = HA * LMTD(Tho, Tco)
 
