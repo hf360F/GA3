@@ -7,30 +7,6 @@ import main as ga3
 from GA3_CONSTS import *
 
 
-def num_tubes():
-    # define solution space
-    Nt = np.arange(7, 20)  # number of tubes
-    lt = np.clip(LT_TOTAL / Nt, None, LT_MAX_1P) - 2 * END_WASTAGE  # tube lengths
-    tube_arr = pd.read_csv("data/tube-arrangements.csv")
-    tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
-    Y = (DS / 0.064) * tube_interp(Nt)  # tube pitch (reference diameter for data weas 0.064)
-
-    Nb = 9  # Number of shell baffle
-
-    isSquare = False
-    Np = 1
-
-    G = 0.2 * DS
-
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb, G, DS, DN)
-    mdot_h, dp_h = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.HOT))
-    mdot_c, dp_c = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.COLD))
-    Q = hx.thermalAnalysis(mdot_h, mdot_c)
-    print(np.max(Q))
-    plt.plot(Nt, Q)
-    plt.show()
-
-
 def num_passes():
     Nt = 13
     lt = np.clip(LT_TOTAL / Nt, None, LT_MAX_1P)  # tube lengths
@@ -45,30 +21,20 @@ def num_passes():
     Np = 1
     G = 0.2 * DS
     Q = []
-    MC, MH = [], []
-    PC, PH = [], []
     hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb[0], G, DS, DN)
+    hpump = ga3.Pump(ga3.Pump.HOT)
+    cpump = ga3.Pump(ga3.Pump.COLD)
 
     for nb in Nb:
         hx.Nb = nb
-        mdot_h, dp_h = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.HOT))
-        mdot_c, dp_c = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.COLD))
-        print(mdot_c)
-        print(mdot_c / (hx.coldStream["rho"] * hx.As))
-        MC.append(mdot_c)
-        MH.append(mdot_h)
-        PC.append(dp_c)
-        PH.append(dp_h)
+        mdot_h, dp_h = hx.chicSolver(hpump)
+        mdot_c, dp_c = hx.chicSolver(cpump)
         Q.append(hx.thermalAnalysis(mdot_h, mdot_c))
 
     Q = np.array(Q)
-    MC = np.array(MC)
-    MH = np.array(MH)
-    PC = np.array(PC)
-    PH = np.array(PH)
 
-    plt.plot(Nb, PC)
-    plt.ylim(0, None)
+    plt.plot(Nb, Q)
+    plt.ylim(0, 11000)
 
     plt.show()
 

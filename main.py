@@ -13,52 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-from scipy.optimize import root
-
-
-def K(sigma, Ret):
-    dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
-    dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
-
-    Ret = np.clip(Ret, 3000, 10000)
-    sigma = np.clip(sigma, 0, 1)
-
-    Kc = scipy.interpolate.griddata(dfKc[:, :-1], dfKc[:, -1], np.column_stack((Ret, sigma)), 'cubic')
-    Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
-
-    return Kc + Ke
-
-
-def chicSolver(hx, pump):
-    """Find intersection of pump and HX characteristic to set operating point.
-    The HX flow path to use is inferred from pump.pump_type.
-    
-    Args:
-        hx (HX object): Heat exchanger design.
-        pump (Pump object): Pump design.
-
-    Returns:
-        (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
-    """
-
-    if pump.pump_type is Pump.HOT:
-        rho = hx.hotStream["rho"]
-        hx_dp = hx.hydraulicAnalysisTube
-
-        # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
-    else:
-        rho = hx.coldStream["rho"]
-        hx_dp = hx.hydraulicAnalysisShell
-
-    def f(mdot):
-        return hx_dp(mdot) - pump.dp(mdot / rho)
-
-    solution = root(f, x0=0.2 * np.ones_like(hx.Nt))
-
-    if not solution.success:
-        raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
-    else:
-        return solution.x, pump.dp(solution.x / rho)
+from scipy.optimize import root, root_scalar
 
 
 class HX:
@@ -101,6 +56,9 @@ class HX:
         self.dn = dn
         self.F = 0.9
 
+        self.dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
+        self.dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
+
         if Np != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
 
@@ -132,6 +90,15 @@ class HX:
     def dseff(self):
         return self.ds * (self.As / self.Apipe)
 
+    def K(self, sigma, Ret):
+        Ret = np.clip(Ret, 3000, 10000)
+        sigma = np.clip(sigma, 0, 1)
+
+        Kc = scipy.interpolate.griddata(self.dfKc[:, :-1], self.dfKc[:, -1], (Ret, sigma), 'cubic')
+        Ke = scipy.interpolate.griddata(self.dfKe[:, :-1], self.dfKe[:, -1], (Ret, sigma), 'cubic')
+
+        return Kc + Ke
+
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
 
@@ -148,7 +115,7 @@ class HX:
         dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Look up total loss factor, and calculate friction
-        Ktot = K(self.sigma, Ret)
+        Ktot = self.K(self.sigma, Ret)
         dpEnds = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
         # Nozzle loss
@@ -168,6 +135,36 @@ class HX:
                   f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
 
         return tubeTotaldP
+
+    def chicSolver(self, pump):
+        """Find intersection of pump and HX characteristic to set operating point.
+        The HX flow path to use is inferred from pump.pump_type.
+
+        Args:
+            pump (Pump object): Pump design.
+
+        Returns:
+            (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
+        """
+
+        if pump.pump_type is Pump.HOT:
+            rho = self.hotStream["rho"]
+            hx_dp = self.hydraulicAnalysisTube
+
+            # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
+        else:
+            rho = self.coldStream["rho"]
+            hx_dp = self.hydraulicAnalysisShell
+
+        def f(mdot):
+            return hx_dp(mdot) - pump.dp(mdot / rho)
+
+        solution = root_scalar(f, bracket=[0.001, 1])
+
+        if not solution.converged:
+            raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
+        else:
+            return solution.root, pump.dp(solution.root / rho)
 
     def hydraulicAnalysisShell(self, mdot, verbose=False):
         """Perform pressure drop analysis on shell flow path for given mdot.
@@ -286,7 +283,7 @@ class HX:
             """
             Tho, Tco = To
             Q = HA * LMTD(Tho, Tco) * self.F
-            return np.concatenate(
+            return np.array(
                 (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
         # initial guess of outlet temperatures
