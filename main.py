@@ -9,8 +9,6 @@ Cold stream inlet fixed as 20 C
 Hot stream inlet fixed as 60 C
 """
 
-import warnings
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -55,7 +53,7 @@ def chicSolver(hx, pump):
     def f(mdot):
         return hx_dp(mdot) - pump.dp(mdot / rho)
 
-    solution = root(f, x0=0.2 * np.ones(len(hx.Nt)))
+    solution = root(f, x0=0.2 * np.ones_like(hx.Nt))
 
     if not solution.success:
         raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
@@ -64,7 +62,7 @@ def chicSolver(hx, pump):
 
 
 class HX:
-    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, B, G, ds, dn):
+    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, G, ds, dn):
         """Heat exchanger design class.
 
         Args:
@@ -81,7 +79,6 @@ class HX:
             isSquare (bool): Are tubes arranged in square pattern, if False tubes are asssumed to be in triangular pattern.
             Np (int): Number of passes.
             Nb (int): Number of baffles.
-            B (float): Baffle pich, m.
             G (float): Baffle cut, m.
             ds (float): Shell diameter, m.
             dn (float): Nozzle diameter for both streams, m.
@@ -99,18 +96,34 @@ class HX:
         self.isSquare = isSquare
         self.Np = Np
         self.Nb = Nb
-        self.B = B
         self.G = G
         self.ds = ds
         self.dn = dn
+        self.variable = np.ones(1)
+        self.F=0.9
 
-        self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
-        self.Apipe = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
-        self.An = self.dn ** 2 * np.pi / 4
-        self.F = 0.9
         if Np != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
+
+    @property
+    def Attot(self):
+        return self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
+
+    @property
+    def Apipe(self):
+        return self.ds ** 2 * np.pi / 4
+
+    @property
+    def sigma(self):
+        return self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
+
+    @property
+    def An(self):
+        return self.dn ** 2 * np.pi / 4
+
+    @property
+    def B(self):
+        return self.lt / (self.Nb + 1)
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -164,15 +177,11 @@ class HX:
         self.dseff = self.ds * (self.As / self.Apipe)
         Res = self.coldStream["rho"] * Vs * self.dseff / self.coldStream["mu"]
 
-        if self.isSquare:
-            a = 0.34
-        else:
-            a = 0.2
+        a = 0.34 if self.isSquare else 0.2
 
         shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.coldStream["rho"] * (Vs ** 2)
 
         # Nozzle loss
-        self.An = self.dn ** 2 * np.pi / 4
         Vn = mdot / (self.hotStream["rho"] * self.An)
         dpNozzles = 2 * 0.5 * self.coldStream["rho"] * (Vn ** 2)
 
