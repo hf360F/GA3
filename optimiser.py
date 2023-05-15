@@ -6,7 +6,7 @@ import main as ga3
 from GA3_CONSTS import *
 
 
-def main():
+def num_tubes():
     # define solution space
     Nt = np.arange(13, 48)  # number of tubes
     lt = 0.27 / Nt  # tube lengths
@@ -19,7 +19,7 @@ def main():
     isSquare = False
     Np = 1
 
-    G = 0.2 * DS  # Baffle cut, m NOT YET USED
+    G = 0.2 * DS
 
     hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb, B, G, DS, DN)
     mdot_h, dp_h = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.HOT))
@@ -29,6 +29,5 @@ def main():
     plt.show()
 
 
-
 if __name__ == "__main__":
-    main()
+    num_tubes()

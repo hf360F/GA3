@@ -285,16 +285,16 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self, mdot_t, mdot_s):
+    def thermalAnalysis(self, mdot_t: float | np.ndarray, mdot_s: float | np.ndarray) -> float | np.ndarray:
         """
         Perform thermal analysis on the HX given the 2 mass flowrates.
 
         Args:
-            mdot_t: Tube mass flow, kg/s.
-            mdot_s: Shell mass flow rate, kg/s
+            mdot_t (float|np.ndarray): Tube mass flow, kg/s.
+            mdot_s (float|np.ndarray): Shell mass flow, kg/s
 
         Returns:
-            Q: Resultant heat transfer rate, W.
+            Q (float|np.ndarray): Resultant heat transfer rate, W.
         """
         # Reynolds numbers
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
@@ -326,23 +326,34 @@ class HX:
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
             T2 = Tho_ - Tci
-            mask = np.isclose(T1, T2)
-            return mask * T1 + (1 - mask) * (T1 - T2) / np.log(T1 / T2)
+            return np.where(np.isclose(T1, T2), T1, (T1 - T2) / np.log(T1 / T2))
 
-        def f(To):
+        # error function for LMTD solver
+        def f(To: np.ndarray):
+            """
+            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT. Input vector is concatenation of estimates of Tho
+            then Tco.
+
+            Args:
+                To (np.ndarray): Array containing estimates of Tho and Tco, with shape (2n,), n number of configurations
+
+            Returns:
+                dQ (float|np.ndarray): Array of errors in Q between 2 methods, of same shape as input vector (2n,)
+
+            """
             Tho, Tco = np.split(To, 2)
             Q = HA * LMTD(Tho, Tco) * self.F
             return np.concatenate(
                 (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
-        x0 = np.concatenate((40 * np.ones_like(mdot_s), 30 * np.ones_like(mdot_s)))
-
-        res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi,2)))
-        Tho, Tco = np.split(res.x,2)
-        print(f'Tho: {Tho}\n'
-              f'Tco: {Tco}')
-
-        print(res)
+        # initial guess of outlet temperatures
+        x0 = np.repeat([40, 30], mdot_s.shape[0])
+        # least squares solver sets errors to zero, optimising for outlet temperatures
+        res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi, 2)))
+        if res.optimality > 1e-5:
+            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
+        # recover vectors of outlet temperatures
+        Tho, Tco = np.split(res.x, 2)
 
         Q = HA * LMTD(Tho, Tco)
 
