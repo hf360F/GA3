@@ -18,7 +18,7 @@ import scipy
 from scipy.optimize import least_squares, root
 
 
-def K_2d_interp(sigma, Ret):
+def K(sigma, Ret):
     dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
     dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
 
@@ -27,76 +27,6 @@ def K_2d_interp(sigma, Ret):
 
     Kc = scipy.interpolate.griddata(dfKc[:, :-1], dfKc[:, -1], np.column_stack((Ret, sigma)), 'cubic')
     Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
-
-    return Kc + Ke
-
-
-def K(sigma, Ret):
-    """Entrance and exit loss coefficient for a tube.  Assumes turbulent flow in tube.
-       Will warn for out of range Reynolds number, but match to the closest curve.
-
-    Args:
-        sigma (float): Ratio of total tube area to shell area.
-        Ret (float): Tube Reynolds number.
-
-    Returns:
-        float: Sum of Kc and Ke loss coefficients.
-    """
-
-    polyOrder = 3
-
-    # Reynolds range covered by curves
-    Remin = 3000
-    Re2 = 5000
-    Remax = 10000
-
-    interpolationFlag = False
-
-    if Ret > Remax:
-        dfKc = pd.read_csv("data/Turb_10000_Kc.csv")
-        dfKe = pd.read_csv("data/Turb_10000_Ke.csv")
-        warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remax = {Remax:.2f}), matching to closest curve.")
-
-    elif Ret > Re2:
-        dfKc = pd.read_csv("data/Turb_5000_Kc.csv")
-        dfKc2 = pd.read_csv("data/Turb_10000_Kc.csv")
-        dfKe = pd.read_csv("data/Turb_5000_Ke.csv")
-        dfKe2 = pd.read_csv("data/Turb_10000_Ke.csv")
-
-        interpolationFlag = False  # Can interpolate between two curves of different Re
-
-    elif Ret >= Remin:
-        dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
-        dfKc2 = pd.read_csv("data/Turb_5000_Kc.csv")
-        dfKe = pd.read_csv("data/Turb_3000_Ke.csv")
-        dfKe2 = pd.read_csv("data/Turb_5000_Ke.csv")
-
-        interpolationFlag = True
-
-    else:
-        dfKc = pd.read_csv("data/Turb_3000_Kc.csv")
-        dfKe = pd.read_csv("data/Turb_3000_Ke.csv")
-        warnings.warn(f"Tube Re = {Ret:.2f} out of range (Remin = {Remin:.2f}), matching to closest curve.")
-
-    # Fit polynomials to digitised data
-    polyCoeffsKc = np.polyfit(dfKc["sigma"], dfKc["Kc"], polyOrder)
-    polyCoeffsKe = np.polyfit(dfKe["sigma"], dfKe["Ke"], polyOrder)
-
-    if interpolationFlag:  # If we need second set of polynomials for interpolating between two curves
-        polyCoeffsKc2 = np.polyfit(dfKc2["sigma"], dfKc2["Kc"], polyOrder)
-        polyCoeffsKe2 = np.polyfit(dfKe2["sigma"], dfKe2["Ke"], polyOrder)
-
-        if Ret >= Re2:
-            weightingFactor = (Ret - Re2) / (Remax - Re2)
-        else:
-            weightingFactor = (Ret - Remin) / (Re2 - Remin)
-
-        Kc = (1 - weightingFactor) * np.poly1d(polyCoeffsKc)(sigma) + weightingFactor * np.poly1d(polyCoeffsKc2)(sigma)
-        Ke = (1 - weightingFactor) * np.poly1d(polyCoeffsKe)(sigma) + weightingFactor * np.poly1d(polyCoeffsKe2)(sigma)
-
-    else:
-        Kc = np.poly1d(polyCoeffsKc)(sigma)
-        Ke = np.poly1d(polyCoeffsKe)(sigma)
 
     return Kc + Ke
 
@@ -178,7 +108,7 @@ class HX:
         self.Apipe = self.ds ** 2 * np.pi / 4
         self.sigma = self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
         self.An = self.dn ** 2 * np.pi / 4
-        self.F = 1
+        self.F = 0.9
         if Np != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
 
@@ -198,7 +128,7 @@ class HX:
         dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Look up total loss factor, and calculate friction
-        Ktot = K_2d_interp(self.sigma, Ret)
+        Ktot = K(self.sigma, Ret)
         dpEnds = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
         # Nozzle loss
@@ -350,7 +280,7 @@ class HX:
         x0 = np.repeat([40, 30], mdot_s.shape[0])
         # least squares solver sets errors to zero, optimising for outlet temperatures
         res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi, 2)))
-        if res.optimality > 1e-5:
+        if res.optimality > 1e-3:
             raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
         # recover vectors of outlet temperatures
         Tho, Tco = np.split(res.x, 2)

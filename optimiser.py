@@ -28,6 +28,10 @@ def num_tubes():
     plt.plot(Nt, Q)
     plt.show()
 
+def num_passes():
+    Nt=13
+    lt=0
+
 
 if __name__ == "__main__":
     num_tubes()
