@@ -15,10 +15,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
+import fluids.fittings as ft
 from scipy.optimize import least_squares, root
 
-
 def K(sigma, Ret):
+    """Sum of inlet and exit tube loss factors.
+
+    Args:
+        sigma (float): Total tube area to header area ratio
+        Ret (float): Tube Reynolds number
+
+    Returns:
+        (float): Sum of Kc and Ke loss factors.
+    """
     dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
     dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
 
@@ -28,7 +37,18 @@ def K(sigma, Ret):
     Kc = scipy.interpolate.griddata(dfKc[:, :-1], dfKc[:, -1], np.column_stack((Ret, sigma)), 'cubic')
     Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
 
-    return Kc + Ke
+    return Kc[0] + Ke[0]
+
+def F(P, R, Nps):
+    """Temperature delta correction factor for one or two shell passes.
+
+    Args:
+        P (_type_): _description_
+        R (_type_): _description_
+        Nps (int): Number of shell passes
+    """
+
+    pass
 
 
 def chicSolver(hx, pump):
@@ -64,7 +84,7 @@ def chicSolver(hx, pump):
 
 
 class HX:
-    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, B, G, ds, dn):
+    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, B, G, ds, dn):
         """Heat exchanger design class.
 
         Args:
@@ -73,13 +93,14 @@ class HX:
             hotStream (dict): Dictionary of hot stream properties, as for cold stream.
             kt (float): Thermal conducitivty of tube, W/mK.
             epst (float): Effective roughness height of tube, m.
-            lt (float|ndarray): Length of tube section, m.
+            lt (float): Length of tube section, m.
             do (float): Tube outer diameter, m.
             di (float): Tube inner diameter, m.
-            Nt (int|ndarray): Number of tubes.
-            Y (float|ndarray): Tube pitch, m.
+            Nt (int): Number of tubes.
+            Y (float): Tube pitch, m.
             isSquare (bool): Are tubes arranged in square pattern, if False tubes are asssumed to be in triangular pattern.
-            Np (int): Number of passes.
+            Nps (int): Number of shell passes.
+            Npt (int): Number of tube passes.
             Nb (int): Number of baffles.
             B (float): Baffle pich, m.
             G (float): Baffle cut, m.
@@ -97,7 +118,8 @@ class HX:
         self.Nt = Nt
         self.Y = Y
         self.isSquare = isSquare
-        self.Np = Np
+        self.Nps = Nps
+        self.Npt = Npt
         self.Nb = Nb
         self.B = B
         self.G = G
@@ -106,10 +128,10 @@ class HX:
 
         self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
         self.Apipe = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
+        self.sigma = self.Attot * self.Nps / self.Apipe  # Note scaling with number of passes Nps
         self.An = self.dn ** 2 * np.pi / 4
         self.F = 0.9
-        if Np != 1:
+        if Nps != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
@@ -125,17 +147,20 @@ class HX:
 
         # Haaland's approximation of Colebrook-White for Darcy friction factor
         fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
-        dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
+        dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2) * self.Npt
 
-        # Look up total loss factor, and calculate friction
-        Ktot = K(self.sigma, Ret)
-        dpEnds = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
+        # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
+        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Ito")
+        Ktot = K(self.sigma, Ret) + (self.Npt - 1)*(Kreturn)
+        
+
+        dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
         # Nozzle loss
         Vn = mdot / (self.hotStream["rho"] * self.An)
         dpNozzles = 2 * 0.5 * self.hotStream["rho"] * (Vn ** 2)
 
-        tubeTotaldP = dpFric + dpEnds + dpNozzles
+        tubeTotaldP = dpFric + dpMinor + dpNozzles
 
         if verbose:
             print(f"\nTUBE HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
@@ -143,9 +168,9 @@ class HX:
             print(f"Tube bulk velocity: {Vt:.2f} m/s")
             print(f"Tube Reynolds number: {Ret:.0f}")
             print(f"Tube friction factor: {fTube:.6f}")
-            print(f"Total inlet/exit loss factor: {Ktot:.3f}")
+            print(f"Sum of minor loss coefficients: {Ktot:.3f}")
             print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"
-                  f" ends {dpEnds:.0f}, nozzles {dpNozzles:.0f})\n")
+                  f" minor losses {dpMinor:.0f}, nozzles {dpNozzles:.0f})\n")
 
         return tubeTotaldP
 
@@ -158,7 +183,7 @@ class HX:
         """
 
         # Shell loss
-        self.As = self.ds * (self.Y - self.do) * self.B / self.Y  # Approximation of shell flow area
+        self.As = self.ds * (self.Y - self.do) * self.B / (self.Y * self.Nps)  # Approximation of shell flow area
         Vs = mdot / (self.coldStream["rho"] * self.As)
 
         self.dseff = self.ds * (self.As / self.Apipe)
@@ -251,7 +276,7 @@ class HX:
         Tci = self.coldStream["Ti"] * np.ones_like(mdot_s)
 
         # SFEE
-        HA = H * np.pi * self.di * self.lt * self.Nt
+        HA = H * np.pi * self.di * self.lt * self.Nt * self.Npt
 
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_

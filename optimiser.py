@@ -5,7 +5,6 @@ from matplotlib import pyplot as plt
 import main as ga3
 from GA3_CONSTS import *
 
-
 def num_tubes():
     # define solution space
     Nt = np.arange(13, 48)  # number of tubes
@@ -17,11 +16,12 @@ def num_tubes():
     B = lt / (Nb + 1)  # Baffle pitch
 
     isSquare = False
-    Np = 1
+    Nps = 1
+    Npt = 1
 
     G = 0.2 * DS
 
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb, B, G, DS, DN)
+    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, B, G, DS, DN)
     mdot_h, dp_h = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.HOT))
     mdot_c, dp_c = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.COLD))
     Q = hx.thermalAnalysis(mdot_h, mdot_c)
@@ -35,3 +35,4 @@ def num_passes():
 
 if __name__ == "__main__":
     num_tubes()
+    #print(hx.hydraulicAnalysisShe;l(mdot = 0.5, verbose=True))
