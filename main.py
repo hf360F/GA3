@@ -137,7 +137,7 @@ class HX:
 
     @property
     def sigma(self):
-        return self.Attot * self.Npt / self.Apipe  # Note scaling with number of tube passes
+        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (self.Apipe * 2)  # Note scaling with number of tube passes
 
     @property
     def An(self):
