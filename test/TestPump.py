@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from main import K_2d_interp as K
+from main import K as K
 
 
 class TestPump(unittest.TestCase):
