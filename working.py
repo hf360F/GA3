@@ -17,6 +17,6 @@ Npt = 1
 
 G = 0.2 * DS
 
-hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, B, G, DS, DN)
+hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, G, DS, DN)
 
 hx.hydraulicAnalysisTube(mdot=0.5, verbose=True)

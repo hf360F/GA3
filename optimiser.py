@@ -14,7 +14,7 @@ def num_tubes():
     tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
     Y = (DS / 0.064) * tube_interp(Nt)  # tube pitch (reference diameter for data weas 0.064)
 
-    Nb = 9  # Number of shell baffle
+    Nb = 9  # Number of shell baffles
 
     isSquare = False
     Nps = 1
@@ -22,11 +22,7 @@ def num_tubes():
 
     G = 0.2 * DS
 
-<<<<<<< HEAD
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, B, G, DS, DN)
-=======
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb, G, DS, DN)
->>>>>>> dbd3188fe97cbf808e6c9e137e26b1a7a7b5d1d5
+    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, G, DS, DN)
     mdot_h, dp_h = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.HOT))
     mdot_c, dp_c = ga3.chicSolver(hx, ga3.Pump(ga3.Pump.COLD))
     Q = hx.thermalAnalysis(mdot_h, mdot_c)
@@ -78,9 +74,4 @@ def num_passes():
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     num_tubes()
-    #print(hx.hydraulicAnalysisShe;l(mdot = 0.5, verbose=True))
-=======
-    num_passes()
->>>>>>> dbd3188fe97cbf808e6c9e137e26b1a7a7b5d1d5

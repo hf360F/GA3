@@ -82,11 +82,7 @@ def chicSolver(hx, pump):
 
 
 class HX:
-<<<<<<< HEAD
-    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, B, G, ds, dn):
-=======
-    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Np, Nb, G, ds, dn):
->>>>>>> dbd3188fe97cbf808e6c9e137e26b1a7a7b5d1d5
+    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, G, ds, dn):
         """Heat exchanger design class.
 
         Args:
@@ -128,16 +124,7 @@ class HX:
         self.variable = np.ones(1)
         self.F=0.9
 
-<<<<<<< HEAD
-        self.Attot = self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
-        self.Apipe = self.ds ** 2 * np.pi / 4
-        self.sigma = self.Attot * self.Nps / self.Apipe  # Note scaling with number of passes Nps
-        self.An = self.dn ** 2 * np.pi / 4
-        self.F = 0.9
         if Nps != 1:
-=======
-        if Np != 1:
->>>>>>> dbd3188fe97cbf808e6c9e137e26b1a7a7b5d1d5
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
 
     @property
@@ -150,7 +137,7 @@ class HX:
 
     @property
     def sigma(self):
-        return self.Attot * self.Np / self.Apipe  # Note scaling with number of passes Np
+        return self.Attot * self.Npt / self.Apipe  # Note scaling with number of tube passes
 
     @property
     def An(self):
@@ -176,7 +163,7 @@ class HX:
         dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2) * self.Npt
 
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
-        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Ito")
+        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Rennels")
         Ktot = K(self.sigma, Ret) + (self.Npt - 1)*(Kreturn)
         
 
