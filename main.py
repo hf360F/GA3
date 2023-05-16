@@ -9,12 +9,12 @@ Cold stream inlet fixed as 20 C
 Hot stream inlet fixed as 60 C
 """
 
+import fluids.fittings as ft
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-import fluids.fittings as ft
-from scipy.optimize import least_squares, root, root_scalar
+from scipy.optimize import root, root_scalar
 
 
 def K(sigma, Ret):
@@ -141,7 +141,8 @@ class HX:
 
     @property
     def sigma(self):
-        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (self.Apipe * 2)  # Note scaling with number of tube passes
+        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (
+                    self.Apipe * 2)  # Note scaling with number of tube passes
 
     @property
     def An(self):
@@ -252,7 +253,7 @@ class HX:
 
         a = 0.34 if self.isSquare else 0.2
 
-        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt*self.Npt* self.coldStream["rho"] * (Vs ** 2)
+        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.Npt * self.coldStream["rho"] * (Vs ** 2)
 
         # Nozzle loss
         Vn = mdot / (self.hotStream["rho"] * self.An)
@@ -263,6 +264,7 @@ class HX:
         if verbose:
             print(f"\nSHELL HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
             print(f"Shell flow area: {self.As:.6f} m^2")
+
             print(f"Shell characteristic velocity: {Vs:.2f} m/s")
             print(f"Shell Reynolds number: {Res:.0f}")
             print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"
@@ -290,12 +292,12 @@ class HX:
         plt.plot(mdots, dpsShell / 1000, label="Shell flow path", color="blue")
         plt.xlim(mdotMin, mdotMax)
         plt.ylim(0)
-        plt.xlabel("Mass flow rate, $kg/s$")
-        plt.ylabel("Pressure drop, $kPa$")
-        plt.title("Heat exchanger characteristics")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        # plt.xlabel("Mass flow rate, $kg/s$")
+        # plt.ylabel("Pressure drop, $kPa$")
+        # plt.title("Heat exchanger characteristics")
+        # plt.legend()
+        # plt.grid()
+        # plt.show()
 
     def thermalAnalysis(self, mdot_t: float, mdot_s: float) -> float:
         """
@@ -358,7 +360,7 @@ class HX:
                 (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
         # initial guess of outlet temperatures
-        x0 = np.array([40, 30])  # least squares solver sets errors to zero, optimising for outlet temperatures
+        x0 = np.array([55, 25])  # least squares solver sets errors to zero, optimising for outlet temperatures
         res = root(f, x0)
         if not res.success:
             raise AssertionError(f"Could not solve for outlet temperatures and heat transfer")

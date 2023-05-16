@@ -1,0 +1,6 @@
+Shell & Tube Heat Exchanger - Shell Side - 1
+
+{Heat Exchanger Results}Effectiveness
+Sample based. Number of Samples : 100, SampleRate: 10
+Run  Time [s]         
+000, 0.00000000E+000,  1.07503997E-001

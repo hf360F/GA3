@@ -1,0 +1,6 @@
+Shell & Tube Heat Exchanger - Shell Side - 1
+
+{Flow Element Results,Energy and Heat Transfer Variables}Total heat transfer
+Sample based. Number of Samples : 100, SampleRate: 10
+Run  Time [s]          (W)
+000, 0.00000000E+000,  8.46747271E+003

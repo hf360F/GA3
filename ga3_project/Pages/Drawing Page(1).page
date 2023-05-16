@@ -1,0 +1,322 @@
+<?xml version="1.0" standalone="yes"?>
+<IPS>
+  <Library Name="IPS" Version="8.14.1.4845" />
+  <Library Name="CapeOpenFluidGenerator" Version="1.0.8314.0" />
+  <Library Name="DCS" Version="8.14.1.0" />
+  <Library Name="ElectricalNetworkSolver" Version="8.14.1.0" />
+  <Library Name="Flownex" Version="8.14.1.0" />
+  <Library Name="ForceCalculations" Version="1.0.8314.0" />
+  <Library Name="IPS.Actions" Version="8.14.1.0" />
+  <Library Name="IPS.Alarms" Version="8.14.1.0" />
+  <Library Name="IPS.Ansys" Version="8.14.1.0" />
+  <Library Name="IPS.Backtracking" Version="8.14.1.0" />
+  <Library Name="IPS.CAESAR2Importer" Version="8.14.1.0" />
+  <Library Name="IPS.DataTransfer" Version="8.14.1.0" />
+  <Library Name="IPS.Designer" Version="8.14.1.0" />
+  <Library Name="IPS.EES" Version="8.14.1.0" />
+  <Library Name="IPS.Excel" Version="8.14.1.0" />
+  <Library Name="IPS.ExcelInputSheets" Version="8.14.1.0" />
+  <Library Name="IPS.ExcelReporting" Version="8.14.1.0" />
+  <Library Name="IPS.Exposers" Version="8.14.1.0" />
+  <Library Name="IPS.FMI" Version="8.14.1.0" />
+  <Library Name="IPS.GAOptimiser" Version="8.14.1.0" />
+  <Library Name="IPS.GlobalParameters" Version="8.14.1.0" />
+  <Library Name="IPS.Logger" Version="8.14.1.0" />
+  <Library Name="IPS.Mathcad" Version="8.14.1.0" />
+  <Library Name="IPS.OPCDriver" Version="8.14.1.0" />
+  <Library Name="IPS.ParameterDisplay" Version="8.14.1.0" />
+  <Library Name="IPS.PropertyMonitor" Version="8.14.1.0" />
+  <Library Name="IPS.Relap" Version="8.14.1.0" />
+  <Library Name="IPS.ROHR2Importer" Version="8.14.1.0" />
+  <Library Name="IPS.ROMBuilder" Version="8.14.1.0" />
+  <Library Name="IPS.ScaleDrawing" Version="8.14.1.0" />
+  <Library Name="IPS.Scheduler" Version="8.14.1.0" />
+  <Library Name="IPS.Scripting" Version="8.14.1.0" />
+  <Library Name="IPS.SensitivityAnalysis" Version="8.14.1.0" />
+  <Library Name="IPS.SixSigma" Version="8.14.1.0" />
+  <Library Name="IPS.TextFileLink" Version="8.14.1.0" />
+  <Library Name="IPS.Tools" Version="8.14.1.0" />
+  <Library Name="IPS.VideoRecorder" Version="1.0.0.0" />
+  <Library Name="IPS.Visualisation" Version="8.14.1.0" />
+  <Library Name="NistFluidGenerator" Version="1.0.8314.0" />
+  <IPS.Plugin.DrawingPageImpl>
+    <Properties>FitInstructorPage FitOperatorPage FloatByDefault FullscreenInstructorPage FullscreenOperatorPage GridSpacingX GridSpacingY Identifier InstructorFloatByDefault InstructorPage OperatorFloatByDefault OperatorPage Origin PersistedIdentifierWithTemplate ScaleX ScaleY Size StartupInstructorPage StartupOperatorPage StyleSelector SystemName TID UserDescription ViewPortOrigin </Properties>
+    <Values>  "False" "False" "False" "False" "False" "50" "50" "Pages\Drawing Page(1).page" "False" "False" "False" "False" "0, 0" "Pages\Drawing Page(1).page" "0.9" "0.9" "8400, 5920" "False" "False" "*F*Solid;Horizontal1;;White;White;100*/F**S*DarkGray;Solid;1*/S**T*Black;Microsoft Sans Serif, 10pt;MiddleCenter;*/T*" "" "" "" "363, 131" </Values>
+    <List Name="LayerDrawingDatas">
+      <IPS.Plugin.LayerDrawingDataImplList>
+        <ListItems>
+          <IPS.Plugin.LayerDrawingDataImpl>
+            <Properties>Active Identifier PersistedIdentifierWithTemplate TID UserDescription Visible VisibleToEngineersOnly zOrder </Properties>
+            <Item Index="0" Identifier="Default">
+              <Values>  "True" "Default" "Default" "" "" "True" "False" "0" </Values>
+              <List Name="ComponentDrawingDatas">
+                <IPS.Core.ComponentDrawingDataList>
+                  <ListItems>
+                    <IPS.Plugin.ComponentDrawingDataImpl>
+                      <Properties>Center ComponentUserName ConfigName DisplayOptionShown FlipX FlipY Identifier Image Merging PersistedIdentifierWithTemplate Rotation Size TID UserDescription WorldCoordinatesX WorldCoordinatesY WorldCoordinatesZ zOrder </Properties>
+                      <Item Index="0" Identifier="View1">
+                        <Values>  "1000, 500" "Shell &amp;amp; Tube Heat Exchanger - Tube Side - 0" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "49.99994, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "0" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "67.5, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.49994, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="1" Identifier="View1">
+                        <Values>  "1000, 275" "Shell &amp;amp; Tube Heat Exchanger - Shell Side - 1" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "1" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "67.5, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-60, 0" "-50, 0" </Values>
+                                </Item>
+                                <Item Index="2">
+                                  <Values>  "View1" "ShellAndTubeFiber" "0, 200" "0, 50" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="2" Identifier="View1">
+                        <Values>  "932.5, 275" "Node - 4" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "2" </Values>
+                      </Item>
+                      <Item Index="3" Identifier="View1">
+                        <Values>  "1075, 275" "Node - 6" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "3" </Values>
+                      </Item>
+                      <Item Index="4" Identifier="View1">
+                        <Values>  "925.000061, 500" "Node - 8" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "4" </Values>
+                      </Item>
+                      <Item Index="5" Identifier="View1">
+                        <Values>  "1075, 500" "Node - 10" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "5" </Values>
+                      </Item>
+                      <Item Index="6" Identifier="View1">
+                        <Values>  "736.25, 275" "Fan or Pump - 12" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "6" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "38.75, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.5, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="7" Identifier="View1">
+                        <Values>  "728.750061, 500" "Fan or Pump - 13" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "7" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "46.25, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.50006, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="8" Identifier="View1">
+                        <Values>  "661.25, 210" "Boundary Condition - 14" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "30, 30" "" "" "0 Length m" "0 Length m" "0 Length m" "8" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "BoundaryConditionFiber" "0, 57.5" "0, 50" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="9" Identifier="View1">
+                        <Values>  "661.25, 275" "Node - 15" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "9" </Values>
+                      </Item>
+                      <Item Index="10" Identifier="View1">
+                        <Values>  "653.75, 435" "Boundary Condition - 16" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "30, 30" "" "" "0 Length m" "0 Length m" "0 Length m" "10" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "BoundaryConditionFiber" "0, 57.5" "0, 50" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="11" Identifier="View1">
+                        <Values>  "653.75, 500" "Node - 17" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "11" </Values>
+                      </Item>
+                      <Item Index="12" Identifier="View1">
+                        <Values>  "1225, 215" "Boundary Condition - 18" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "30, 30" "" "" "0 Length m" "0 Length m" "0 Length m" "12" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "BoundaryConditionFiber" "0, 52.5" "0, 50" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="13" Identifier="View1">
+                        <Values>  "1225, 435" "Boundary Condition - 19" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "30, 30" "" "" "0 Length m" "0 Length m" "0 Length m" "13" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "BoundaryConditionFiber" "0, 57.5" "0, 50" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="14" Identifier="View1">
+                        <Values>  "857.5, 275" "Nozzle - 20" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "14" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "67.5, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.5, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="15" Identifier="View1">
+                        <Values>  "857.500061, 500" "Nozzle - 20 Copy(001)" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "15" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "60, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.5, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="16" Identifier="View1">
+                        <Values>  "1150, 275" "Nozzle - 20 Copy(002)" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "16" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "67.5, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.5, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="17" Identifier="View1">
+                        <Values>  "1225, 275" "Node - 21" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "17" </Values>
+                      </Item>
+                      <Item Index="18" Identifier="View1">
+                        <Values>  "1150, 500" "Nozzle - 20 Copy(003)" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "50, 50" "" "" "0 Length m" "0 Length m" "0 Length m" "18" </Values>
+                        <List Name="FiberDrawingDatas">
+                          <IPS.Core.FiberDrawingDataList>
+                            <ListItems>
+                              <IPS.Plugin.FiberDrawingDataImpl>
+                                <Properties>ConnectedViewName FiberName Location OriginLocation </Properties>
+                                <Item Index="0">
+                                  <Values>  "View1" "DownstreamFiber" "67.5, 0" "50, 0" </Values>
+                                </Item>
+                                <Item Index="1">
+                                  <Values>  "View1" "UpstreamFiber" "-67.5, 0" "-50, 0" </Values>
+                                </Item>
+                              </IPS.Plugin.FiberDrawingDataImpl>
+                            </ListItems>
+                          </IPS.Core.FiberDrawingDataList>
+                        </List>
+                      </Item>
+                      <Item Index="19" Identifier="View1">
+                        <Values>  "1225, 500" "Node - 22" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "19" </Values>
+                      </Item>
+                      <Item Index="20" Identifier="View1">
+                        <Values>  "782.5, 275" "Node - 23" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "20" </Values>
+                      </Item>
+                      <Item Index="21" Identifier="View1">
+                        <Values>  "782.500061, 500" "Node - 24" "(Default)" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "15, 15" "" "" "0 Length m" "0 Length m" "0 Length m" "21" </Values>
+                      </Item>
+                      <Item Index="22" Identifier="View1">
+                        <Values>  "1010, 390" "IO Box - 25" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "220, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "22" </Values>
+                      </Item>
+                      <Item Index="23" Identifier="View1">
+                        <Values>  "977, 190" "IO Box - 26" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "254, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "23" </Values>
+                      </Item>
+                      <Item Index="24" Identifier="View1">
+                        <Values>  "1000, 365" "IO Box - 28" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "292, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "24" </Values>
+                      </Item>
+                      <Item Index="25" Identifier="View1">
+                        <Values>  "998, 585" "IO Box - 29" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "254, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "25" </Values>
+                      </Item>
+                      <Item Index="26" Identifier="View1">
+                        <Values>  "975, 165" "IO Box - 31" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "234, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "26" </Values>
+                      </Item>
+                      <Item Index="27" Identifier="View1">
+                        <Values>  "992, 615" "IO Box - 32" "" "ChooseConfiguration" "False" "False" "View1" "" "NORMAL" "View1" "0" "234, 20" "" "" "0 Length m" "0 Length m" "0 Length m" "27" </Values>
+                      </Item>
+                    </IPS.Plugin.ComponentDrawingDataImpl>
+                  </ListItems>
+                </IPS.Core.ComponentDrawingDataList>
+              </List>
+            </Item>
+          </IPS.Plugin.LayerDrawingDataImpl>
+        </ListItems>
+      </IPS.Plugin.LayerDrawingDataImplList>
+    </List>
+  </IPS.Plugin.DrawingPageImpl>
+</IPS>

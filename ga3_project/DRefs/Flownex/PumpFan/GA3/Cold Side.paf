@@ -1,0 +1,21 @@
+Fan chart
+990  {reference density, kg/m^3}
+1  {volumetric flow rate(approximate value) at zero pressure increase, m^3/s}
+----------------- Fan curve -----------------------
+Single entry of -9 signifies end of list.
+Give minimum of 5 and maximum of 20 points on curve.
+---------------------------------------------------
+Q (m^3/s)      	P (Pa)
+0.0001583  58760
+0.0001917  57170
+0.0002417  53520
+0.0003083  48560
+0.0003583  45030
+0.000425  40380
+0.0005083  34170
+0.000575  27500
+0.0006417  20170
+0.0007083  13100
+-9
+Q (m^3/s)      	NPSH (m)
+-9
