@@ -9,19 +9,20 @@ from GA3_CONSTS import *
 
 def num_passes():
     Nt = 13
-    lt = np.clip(LT_TOTAL / Nt, None, LT_MAX_1P)  # tube lengths
+    Npt = 1
+    Nps = 1
+    lt = np.min(LT_TOTAL / Nt, LT_MAX_1P)  # tube lengths
 
     tube_arr = pd.read_csv("data/tube-arrangements.csv")
     tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
-    Y = (DS / 0.064) * tube_interp(Nt)  # tube pitch (reference diameter for data weas 0.064)
+    Y = (DS / 0.064) * tube_interp(Nt * Npt)  # tube pitch (reference diameter for data weas 0.064)
 
     Nb = np.arange(0, 10)
 
     isSquare = False
-    Np = 1
     G = 0.2 * DS
     Q = []
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Np, Nb[0], G, DS, DN)
+    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb[0], G, DS, DN)
     hpump = ga3.Pump(ga3.Pump.HOT)
     cpump = ga3.Pump(ga3.Pump.COLD)
 
