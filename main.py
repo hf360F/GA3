@@ -16,6 +16,32 @@ import scipy
 import fluids.fittings as ft
 from scipy.optimize import least_squares, root
 
+def F(P, R, Nps):
+    """Temperature delta correction factor, for Q = HAF * LMTD.
+
+    Args:
+        P (float): Ratio of cold stream inlet-outlet dT to hot to cold stream inlet dT.
+        R (float): Heat capacity ratio, cold stream to hot stream.
+        Nps (int): Number of shell passes, data only covers Nps = 1 or Nps = 2.
+
+    Returns:
+        (float): Correction factor F.
+    """
+    if Nps == 1:
+        df = pd.read_csv("data/F1pass.csv").to_numpy()
+    elif Nps == 2:
+        df = pd.read_csv("data/F2pass.csv").to_numpy()
+    else:
+        raise(ValueError("Data for temperature delta correction only supports 1 or 2 shell passes"))
+
+    R = np.clip(R, 0.4, 2)
+    P = np.clip(P, 0, 1)
+
+    F = scipy.interpolate.griddata(df[:, :-1], df[:, -1], np.column_stack((R, P)), "cubic")
+    print(F)
+
+    return F
+
 def K(sigma, Ret):
     """Sum of inlet and exit tube loss factors.
 
@@ -36,18 +62,6 @@ def K(sigma, Ret):
     Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
 
     return Kc[0] + Ke[0]
-
-def F(P, R, Nps):
-    """Temperature delta correction factor for one or two shell passes.
-
-    Args:
-        P (_type_): _description_
-        R (_type_): _description_
-        Nps (int): Number of shell passes
-    """
-
-    pass
-
 
 def chicSolver(hx, pump):
     """Find intersection of pump and HX characteristic to set operating point.
