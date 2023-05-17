@@ -263,7 +263,7 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self, mdot_t: float | np.ndarray, mdot_s: float | np.ndarray) -> float | np.ndarray:
+    def thermalAnalysis(self, mdot_t: float | np.ndarray, mdot_s: float | np.ndarray, verbose: bool = False) -> float | np.ndarray:
         """
         Perform thermal analysis on the HX given the 2 mass flowrates.
 
@@ -334,6 +334,13 @@ class HX:
         Tho, Tco = np.split(res.x, 2)
 
         Q = HA * LMTD(Tho, Tco)
+
+        if verbose:
+            for i in range(len(Q)):
+                print(f"\nHX THERMAL ANALYSIS FOR HEAT EXCHANGER {i}\n")
+                print(f"Heat transfer rate Q = {Q[i]/1000:.2f} kW.")
+                print(f"mdotc = {mdot_t[i]:.3f} kg/s, Tco = {Tco[i]:.2f} C, deltaTc = {(Tco[i] - self.coldStream['Ti']):.2f} C.")
+                print(f"mdoth = {mdot_s[i]:.3f} kg/s, Tho = {Tho[i]:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho[i]):.2f} C.\n")
 
         return Q
 
