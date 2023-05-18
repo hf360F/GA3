@@ -1,0 +1,400 @@
+Operating system: Microsoft Windows 11 Home
+Logged in user name: elhc1
+Machine name: DELL-G5
+User:  Time: 16/05/2023 12:57:53 Simulation Time: 00h  00m  00s  000ms Close page: Pages\Drawing Page(1).page
+User:  Time: 16/05/2023 12:57:55 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:58:41 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:58:41 Simulation Time: 00h  00m  00s  000ms Insert Element Shell & Tube Heat Exchanger - Tube Side - 0 
+User: Engineer Time: 16/05/2023 12:58:43 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:58:43 Simulation Time: 00h  00m  00s  000ms Insert Element Shell & Tube Heat Exchanger - Shell Side - 1 
+User: Engineer Time: 16/05/2023 12:58:45 Simulation Time: 00h  00m  00s  000ms Move elements Shell & Tube Heat Exchanger - Shell Side - 1 
+User: Engineer Time: 16/05/2023 12:58:47 Simulation Time: 00h  00m  00s  000ms Connect Fiber 
+User: Engineer Time: 16/05/2023 12:59:07 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:07 Simulation Time: 00h  00m  00s  000ms Insert Element Node - 2 
+User: Engineer Time: 16/05/2023 12:59:10 Simulation Time: 00h  00m  00s  000ms Delete Node - 2 
+User: Engineer Time: 16/05/2023 12:59:12 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:12 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 3 Node - 4 
+User: Engineer Time: 16/05/2023 12:59:16 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:16 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 5 Node - 6 
+User: Engineer Time: 16/05/2023 12:59:18 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:18 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 7 Node - 8 
+User: Engineer Time: 16/05/2023 12:59:20 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:20 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 9 Node - 10 
+User: Engineer Time: 16/05/2023 12:59:21 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:26 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 3 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:29 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 12:59:31 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 7 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:10 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:11 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 7 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:19 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:19 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:21 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 3 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:22 Simulation Time: 00h  00m  00s  000ms Delete Boundary Condition - 3 
+User: Engineer Time: 16/05/2023 13:00:22 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 7 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:23 Simulation Time: 00h  00m  00s  000ms Delete Boundary Condition - 7 
+User: Engineer Time: 16/05/2023 13:00:24 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 9 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:24 Simulation Time: 00h  00m  00s  000ms Delete Boundary Condition - 9 
+User: Engineer Time: 16/05/2023 13:00:25 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 5 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:25 Simulation Time: 00h  00m  00s  000ms Delete Boundary Condition - 5 
+User: Engineer Time: 16/05/2023 13:00:44 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:44 Simulation Time: 00h  00m  00s  000ms Insert Element Basic Centrifugal Pump - 11 
+User: Engineer Time: 16/05/2023 13:00:52 Simulation Time: 00h  00m  00s  000ms Delete Basic Centrifugal Pump - 11 
+User: Engineer Time: 16/05/2023 13:00:55 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:55 Simulation Time: 00h  00m  00s  000ms Insert Element Fan or Pump - 12 
+User: Engineer Time: 16/05/2023 13:00:57 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:00:57 Simulation Time: 00h  00m  00s  000ms Insert Element Fan or Pump - 13 
+User: Engineer Time: 16/05/2023 13:00:58 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:01 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:01 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:03 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:06 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:18 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:01:19 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:02:29 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:05:56 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:05:56 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:02 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:03 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 13 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:06 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:07 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:16 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:16 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 14 Node - 15 
+User: Engineer Time: 16/05/2023 13:06:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:17 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 16 Node - 17 
+User: Engineer Time: 16/05/2023 13:06:18 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:21 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:21 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 18 
+User: Engineer Time: 16/05/2023 13:06:22 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:22 Simulation Time: 00h  00m  00s  000ms Insert Element Boundary Condition - 19 
+User: Engineer Time: 16/05/2023 13:06:25 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 13 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:26 Simulation Time: 00h  00m  00s  000ms Move elements Fan or Pump - 13 
+User: Engineer Time: 16/05/2023 13:06:27 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:30 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:47 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:48 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:06:49 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:14 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 cSpecifyPressure Fixed on user static value
+User: Engineer Time: 16/05/2023 13:07:26 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 dStaticPressure 100000
+User: Engineer Time: 16/05/2023 13:07:29 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:29 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:31 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:33 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 dStaticPressure 101
+User: Engineer Time: 16/05/2023 13:07:34 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:34 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 18 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:38 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 18 cSpecifyPressure Fixed on user static value
+User: Engineer Time: 16/05/2023 13:07:40 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 18 dStaticPressure 101
+User: Engineer Time: 16/05/2023 13:07:41 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:41 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:44 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 cSpecifyTemperature Fixed on user value
+User: Engineer Time: 16/05/2023 13:07:53 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 dTemperature 20
+User: Engineer Time: 16/05/2023 13:07:55 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:55 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 16 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:07:58 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 cSpecifyPressure Fixed on user static value
+User: Engineer Time: 16/05/2023 13:08:02 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 dStaticPressure 101
+User: Engineer Time: 16/05/2023 13:08:05 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 cSpecifyTemperature Fixed on user value
+User: Engineer Time: 16/05/2023 13:08:30 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 dTemperature 60
+User: Engineer Time: 16/05/2023 13:08:32 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:08:32 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:08:58 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 19 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:02 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 19 cSpecifyPressure Fixed on user static value
+User: Engineer Time: 16/05/2023 13:09:04 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 19 dStaticPressure 101
+User: Engineer Time: 16/05/2023 13:09:05 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:05 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:07 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:33 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:40 Simulation Time: 00h  00m  00s  000ms Set property value: Flow Solver SolverConfiguration.TemperatureSolverUseBiCG True
+User: Engineer Time: 16/05/2023 13:09:45 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:09:46 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:10:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:10:17 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:10:21 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:10:44 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:11:23 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:11:28 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:12:53 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:15:12 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:16:22 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:17:53 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 iNumPipeL 13
+User: Engineer Time: 16/05/2023 13:17:57 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 dInsideDiamL 0
+User: Engineer Time: 16/05/2023 13:18:00 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 dInsideDiamL 6
+User: Engineer Time: 16/05/2023 13:18:02 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 dLengthPassL 0
+User: Engineer Time: 16/05/2023 13:18:06 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 dLengthPassL 8
+User: Engineer Time: 16/05/2023 13:21:25 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 pPrimaryLossSpecification.dRoughness 0.0014
+User: Engineer Time: 16/05/2023 13:21:31 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 pPrimaryLossSpecification.dRoughness 1.4
+User: Engineer Time: 16/05/2023 13:21:32 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:21:32 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:21:35 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:21:57 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 pHSpecificationSubclass.dFinEfficiency 1
+User: Engineer Time: 16/05/2023 13:22:05 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 pHSpecificationSubclass.cTubeRoughnessOption Obtain from flow component
+User: Engineer Time: 16/05/2023 13:26:54 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 dKin 1.24
+User: Engineer Time: 16/05/2023 13:27:03 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:27:04 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:27:12 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 cMatSelectType Select from data reference
+User: Engineer Time: 16/05/2023 13:28:32 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 iNumPassG 9
+User: Engineer Time: 16/05/2023 13:28:36 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dShellDiam 0
+User: Engineer Time: 16/05/2023 13:28:38 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dLengthG 0
+User: Engineer Time: 16/05/2023 13:28:41 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dShellDiam 64
+User: Engineer Time: 16/05/2023 13:28:46 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dLengthG 270
+User: Engineer Time: 16/05/2023 13:29:29 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dMass 0
+User: Engineer Time: 16/05/2023 13:29:30 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dMass 0
+User: Engineer Time: 16/05/2023 13:29:33 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:29:33 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:29:41 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:29:53 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dWallThick 0
+User: Engineer Time: 16/05/2023 13:29:56 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dWallThick 1
+User: Engineer Time: 16/05/2023 13:32:10 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 pHSpecificationSubclass.dFinEfficiency 1
+User: Engineer Time: 16/05/2023 13:32:15 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 pHSpecificationSubclass.dFinEfficiency 0
+User: Engineer Time: 16/05/2023 13:41:16 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSigma 0.1142578125
+User: Engineer Time: 16/05/2023 13:42:15 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSigma 0.8857421875
+User: Engineer Time: 16/05/2023 13:42:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:42:17 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:42:20 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:42:41 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dVoidFraction 0.8857421875
+User: Engineer Time: 16/05/2023 13:46:07 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSigma 0.466
+User: Engineer Time: 16/05/2023 13:46:12 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSigma 0.4667
+User: Engineer Time: 16/05/2023 13:46:13 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:13 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:14 Simulation Time: 00h  00m  00s  000ms Execute server command: Run
+User: Engineer Time: 16/05/2023 13:46:22 Simulation Time: 00h  00m  22s  200ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:23 Simulation Time: 00h  00m  26s  700ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:46 Simulation Time: 00h  01m  38s  900ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:52 Simulation Time: 00h  01m  56s  700ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:46:59 Simulation Time: 00h  02m  29s  700ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:47:00 Simulation Time: 00h  02m  34s  700ms Execute server command: Deactivate
+User: Engineer Time: 16/05/2023 13:47:01 Simulation Time: 00h  02m  34s  900ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:47:02 Simulation Time: 00h  02m  34s  900ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:47:02 Simulation Time: 00h  02m  34s  900ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:47:18 Simulation Time: 00h  02m  34s  900ms Execute server command: Run
+User: Engineer Time: 16/05/2023 13:47:25 Simulation Time: 00h  02m  50s  900ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:47:25 Simulation Time: 00h  02m  52s  900ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:48:00 Simulation Time: 00h  04m  12s  300ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dBundleWidth1 0
+User: Engineer Time: 16/05/2023 13:48:06 Simulation Time: 00h  04m  24s  800ms Execute server command: Deactivate
+User: Engineer Time: 16/05/2023 13:48:07 Simulation Time: 00h  04m  24s  800ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:48:08 Simulation Time: 00h  04m  24s  800ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dBundleWidth1 64
+User: Engineer Time: 16/05/2023 13:48:11 Simulation Time: 00h  04m  24s  800ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:48:12 Simulation Time: 00h  04m  24s  800ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:48:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:48:37 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dHXArea 0
+User: Engineer Time: 16/05/2023 13:50:04 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dHXArea 0.0879645943005142
+User: Engineer Time: 16/05/2023 13:50:13 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dAreaRatio 0.75
+User: Engineer Time: 16/05/2023 13:50:17 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:50:17 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:50:26 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:50:45 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSpaceWidth1 0
+User: Engineer Time: 16/05/2023 13:50:50 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSpaceWidth1 1
+User: Engineer Time: 16/05/2023 13:50:50 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:50:51 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:50:53 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:50:55 Simulation Time: 00h  00m  00s  000ms Execute server command: Run
+User: Engineer Time: 16/05/2023 13:51:00 Simulation Time: 00h  02m  00s  600ms Execute server command: Deactivate
+User: Engineer Time: 16/05/2023 13:51:02 Simulation Time: 00h  02m  00s  600ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:51:02 Simulation Time: 00h  02m  00s  600ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:51:11 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:51:14 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 dSpaceWidth1 0
+User: Engineer Time: 16/05/2023 13:51:25 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:51:26 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:51:58 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Tube Side - 0 iNumParallelL 4
+User: Engineer Time: 16/05/2023 13:52:01 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:52:01 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:52:21 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:21 Simulation Time: 00h  00m  00s  000ms Select Node - 6 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:23 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:28 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 and Fan or Pump - 13 - View1 and Boundary Condition - 14 - View1 and Node - 15 - View1 and Boundary Condition - 16 - View1 and Node - 17 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:30 Simulation Time: 00h  00m  00s  000ms Move elements Fan or Pump - 12 Fan or Pump - 13 Boundary Condition - 14 Node - 15 Boundary Condition - 16 Node - 17 
+User: Engineer Time: 16/05/2023 13:52:32 Simulation Time: 00h  00m  00s  000ms Select Node - 4 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:33 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:34 Simulation Time: 00h  00m  00s  000ms Select Node - 4 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:35 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:38 Simulation Time: 00h  00m  00s  000ms Move Fiber 
+User: Engineer Time: 16/05/2023 13:52:39 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 13 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:42 Simulation Time: 00h  00m  00s  000ms Move Fiber 
+User: Engineer Time: 16/05/2023 13:52:43 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:43 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:58 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:52:58 Simulation Time: 00h  00m  00s  000ms Insert Element Nozzle - 20 
+User: Engineer Time: 16/05/2023 13:53:06 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dDiameter 0
+User: Engineer Time: 16/05/2023 13:53:09 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dDiameter 20
+User: Engineer Time: 16/05/2023 13:53:13 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dLength 50
+User: Engineer Time: 16/05/2023 13:53:14 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dLength 50000
+User: Engineer Time: 16/05/2023 13:53:16 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dLength 50
+User: Engineer Time: 16/05/2023 13:53:25 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 cInletSpecification Rounded
+User: Engineer Time: 16/05/2023 13:53:28 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dInletRadius 0
+User: Engineer Time: 16/05/2023 13:53:34 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dInletRadius 5
+User: Engineer Time: 16/05/2023 13:54:17 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:54:18 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:54:23 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:54:26 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 cRestrictionArea1Option Specify area
+User: Engineer Time: 16/05/2023 13:54:44 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dRestrictionArea1User 0
+User: Engineer Time: 16/05/2023 13:54:55 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dRestrictionArea1User 1256
+User: Engineer Time: 16/05/2023 13:55:04 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:07 Simulation Time: 00h  00m  00s  000ms Paste Nozzle - 20 Copy(001) 
+User: Engineer Time: 16/05/2023 13:55:11 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(001) 
+User: Engineer Time: 16/05/2023 13:55:12 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 19 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:14 Simulation Time: 00h  00m  00s  000ms Move elements Boundary Condition - 19 
+User: Engineer Time: 16/05/2023 13:55:16 Simulation Time: 00h  00m  00s  000ms Move Fiber 
+User: Engineer Time: 16/05/2023 13:55:17 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 18 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:19 Simulation Time: 00h  00m  00s  000ms Move elements Boundary Condition - 18 
+User: Engineer Time: 16/05/2023 13:55:21 Simulation Time: 00h  00m  00s  000ms Move Fiber 
+User: Engineer Time: 16/05/2023 13:55:24 Simulation Time: 00h  00m  00s  000ms Paste Nozzle - 20 Copy(002) 
+User: Engineer Time: 16/05/2023 13:55:28 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(002) 
+User: Engineer Time: 16/05/2023 13:55:30 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(002) Node - 21 
+User: Engineer Time: 16/05/2023 13:55:32 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(002) 
+User: Engineer Time: 16/05/2023 13:55:33 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:35 Simulation Time: 00h  00m  00s  000ms Paste Nozzle - 20 Copy(003) 
+User: Engineer Time: 16/05/2023 13:55:41 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(003) Node - 22 
+User: Engineer Time: 16/05/2023 13:55:43 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(003) 
+User: Engineer Time: 16/05/2023 13:55:44 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:45 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(003) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:47 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(003) 
+User: Engineer Time: 16/05/2023 13:55:47 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:49 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(003) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:49 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(003) 
+User: Engineer Time: 16/05/2023 13:55:51 Simulation Time: 00h  00m  00s  000ms Move elements Nozzle - 20 Copy(003) 
+User: Engineer Time: 16/05/2023 13:55:52 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:54 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:55:57 Simulation Time: 00h  00m  00s  000ms Connect Fiber Node - 23 
+User: Engineer Time: 16/05/2023 13:55:58 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 13 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:00 Simulation Time: 00h  00m  00s  000ms Connect Fiber Node - 24 
+User: Engineer Time: 16/05/2023 13:56:00 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:03 Simulation Time: 00h  00m  00s  000ms Execute server command: Run
+User: Engineer Time: 16/05/2023 13:56:04 Simulation Time: 00h  00m  00s  100ms Execute server command: Deactivate
+User: Engineer Time: 16/05/2023 13:56:06 Simulation Time: 00h  00m  00s  100ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:56:06 Simulation Time: 00h  00m  00s  100ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:56:13 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:14 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(001) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:40 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(001) dNozzleDiamRatio 1
+User: Engineer Time: 16/05/2023 13:56:43 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(001) cRestrictionArea1Option Stagnant volume (Area irrelevant)
+User: Engineer Time: 16/05/2023 13:56:47 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:56:47 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:56:51 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:51 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(002) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:53 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(002) cRestrictionArea1Option Stagnant volume (Area irrelevant)
+User: Engineer Time: 16/05/2023 13:56:54 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(002) dNozzleDiamRatio 1
+User: Engineer Time: 16/05/2023 13:56:56 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:56 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(003) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:56:58 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(003) dNozzleDiamRatio 1
+User: Engineer Time: 16/05/2023 13:57:00 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 Copy(003) cRestrictionArea1Option Stagnant volume (Area irrelevant)
+User: Engineer Time: 16/05/2023 13:57:01 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:01 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:03 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 cRestrictionArea1Option Stagnant volume (Area irrelevant)
+User: Engineer Time: 16/05/2023 13:57:05 Simulation Time: 00h  00m  00s  000ms Set property value: Nozzle - 20 dNozzleDiamRatio 1
+User: Engineer Time: 16/05/2023 13:57:07 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:57:07 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:57:09 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:10 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:14 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:33 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:33 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:38 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:38 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:57:59 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 pHSpecificationSubclass.dFinEfficiency 1
+User: Engineer Time: 16/05/2023 13:58:01 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 13:58:01 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 13:58:04 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:14 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:15 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:22 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:22 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:23 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:34 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:58:34 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 25 
+User: Engineer Time: 16/05/2023 13:58:37 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:01 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:01 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 26 
+User: Engineer Time: 16/05/2023 13:59:05 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:11 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:11 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 27 
+User: Engineer Time: 16/05/2023 13:59:14 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:23 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:23 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 28 
+User: Engineer Time: 16/05/2023 13:59:24 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:26 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:37 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:38 Simulation Time: 00h  00m  00s  000ms Select IO Box - 28 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:40 Simulation Time: 00h  00m  00s  000ms Move elements IO Box - 28 
+User: Engineer Time: 16/05/2023 13:59:40 Simulation Time: 00h  00m  00s  000ms Select IO Box - 25 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:41 Simulation Time: 00h  00m  00s  000ms Move elements IO Box - 25 
+User: Engineer Time: 16/05/2023 13:59:43 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:54 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 13:59:54 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 29 
+User: Engineer Time: 16/05/2023 13:59:56 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Tube Side - 0 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:00:02 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:00:02 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 30 
+User: Engineer Time: 16/05/2023 14:00:04 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:00:18 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:00:20 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:00:27 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:00:28 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:01:48 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:01:49 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:02:27 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:02:27 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:36 Simulation Time: 00h  00m  00s  000ms Select Node - 24 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:40 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:40 Simulation Time: 00h  00m  00s  000ms Select IO Box - 30 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:41 Simulation Time: 00h  00m  00s  000ms Delete IO Box - 30 
+User: Engineer Time: 16/05/2023 14:03:42 Simulation Time: 00h  00m  00s  000ms Select IO Box - 27 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:43 Simulation Time: 00h  00m  00s  000ms Delete IO Box - 27 
+User: Engineer Time: 16/05/2023 14:03:44 Simulation Time: 00h  00m  00s  000ms Select Node - 23 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:55 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:03:55 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 31 
+User: Engineer Time: 16/05/2023 14:03:57 Simulation Time: 00h  00m  00s  000ms Select Node - 24 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:01 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:01 Simulation Time: 00h  00m  00s  000ms Insert Element IO Box - 32 
+User: Engineer Time: 16/05/2023 14:04:02 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 18 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:05 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 18 dStaticPressure 0
+User: Engineer Time: 16/05/2023 14:04:06 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:06 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:08 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 dStaticPressure 0
+User: Engineer Time: 16/05/2023 14:04:09 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:09 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 16 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:11 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 dStaticPressure 0
+User: Engineer Time: 16/05/2023 14:04:12 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:12 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 19 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:13 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 19 dStaticPressure 0
+User: Engineer Time: 16/05/2023 14:04:15 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:04:16 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:04:27 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:29 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:39 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 16 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:41 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 dStaticPressure 101
+User: Engineer Time: 16/05/2023 14:04:43 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:43 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 14 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:44 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 14 dStaticPressure 101
+User: Engineer Time: 16/05/2023 14:04:45 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:46 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 18 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:48 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 18 dStaticPressure 101
+User: Engineer Time: 16/05/2023 14:04:49 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:49 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 19 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:51 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 19 dStaticPressure 101
+User: Engineer Time: 16/05/2023 14:04:53 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:04:53 Simulation Time: 00h  00m  00s  000ms Select Boundary Condition - 16 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:00 Simulation Time: 00h  00m  00s  000ms Set property value: Boundary Condition - 16 dSolverPressure 0
+User: Engineer Time: 16/05/2023 14:05:02 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:03 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:04 Simulation Time: 00h  00m  00s  000ms Select Node - 24 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:09 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:05:09 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:05:09 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:13 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:05:15 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:05:15 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:05:18 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:05:18 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:05:36 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:05:36 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:05:57 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:09 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:13 Simulation Time: 00h  00m  00s  000ms Select Nozzle - 20 Copy(002) - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:19 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:20 Simulation Time: 00h  00m  00s  000ms Select Fan or Pump - 12 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:26 Simulation Time: 00h  00m  00s  000ms Select Shell & Tube Heat Exchanger - Shell Side - 1 - View1 on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:06:44 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 iNumPassG 1
+User: Engineer Time: 16/05/2023 14:06:48 Simulation Time: 00h  00m  00s  000ms Set property value: Shell & Tube Heat Exchanger - Shell Side - 1 iNumPassG 2
+User: Engineer Time: 16/05/2023 14:06:50 Simulation Time: 00h  00m  00s  000ms Execute server command: SolveSteadyState
+User: Engineer Time: 16/05/2023 14:06:50 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
+User: Engineer Time: 16/05/2023 14:07:10 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:07:10 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:07:26 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User: Engineer Time: 16/05/2023 14:07:26 Simulation Time: 00h  00m  00s  000ms Close page: Pages\Drawing Page(1).page

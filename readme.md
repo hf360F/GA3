@@ -11,4 +11,5 @@
   - 2-pass design has plenum lengths `lp1>=0.04`, `lp2` unconstrained -> `lt<=0.34` so `Nt>=11`
 - tube pitch must be greater than tube diameter `Y>=DO`, restricts number of tubes `Nt` to 47
 
+![Stanton Number Relationship](stanton-generalised.png)
 

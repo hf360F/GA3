@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TreeState xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ExpandedNodes>
+    <string />
+    <string>Project Database</string>
+    <string>Master Database</string>
+    <string>Master Database\Flow Solver</string>
+    <string>Master Database\Flow Solver\Discharge Nozzles</string>
+    <string>Master Database\Flow Solver\Heat Exchangers</string>
+    <string>Master Database\Flow Solver\Nodes and Boundaries</string>
+    <string>Master Database\Flow Solver\Turbos and Pumps</string>
+  </ExpandedNodes>
+  <SelectedItem>Master Database\Flow Solver\Discharge Nozzles\Nozzle</SelectedItem>
+  <TopItem>Master Database\Flow Solver\Containers</TopItem>
+</TreeState>

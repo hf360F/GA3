@@ -9,12 +9,13 @@ Cold stream inlet fixed as 20 C
 Hot stream inlet fixed as 60 C
 """
 
+import fluids.fittings as ft
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-import fluids.fittings as ft
-from scipy.optimize import least_squares, root
+from scipy.optimize import root, root_scalar
+
 
 def Flookup(P, R, Nps):
     """Temperature delta correction factor, for Q = HAF * LMTD.
@@ -62,6 +63,22 @@ def K(sigma, Ret):
 
     return Kc[0] + Ke[0]
 
+<<<<<<< HEAD
+=======
+
+def F(P, R, Nps):
+    """Temperature delta correction factor for one or two shell passes.
+
+    Args:
+        P (_type_): _description_
+        R (_type_): _description_
+        Nps (int): Number of shell passes
+    """
+
+    pass
+
+
+>>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 def chicSolver(hx, pump):
     """Find intersection of pump and HX characteristic to set operating point.
     The HX flow path to use is inferred from pump.pump_type.
@@ -133,7 +150,14 @@ class HX:
         self.G = G
         self.ds = ds
         self.dn = dn
+<<<<<<< HEAD
         self.variable = np.ones(1)
+=======
+        self.F = 0.9
+
+        self.dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
+        self.dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
+>>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         if Nps != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
@@ -148,7 +172,8 @@ class HX:
 
     @property
     def sigma(self):
-        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (self.Apipe * 2)  # Note scaling with number of tube passes
+        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (
+                    self.Apipe * 2)  # Note scaling with number of tube passes
 
     @property
     def An(self):
@@ -157,6 +182,53 @@ class HX:
     @property
     def B(self):
         return self.lt / (self.Nb + 1)
+
+    @property
+    def As(self):
+        return self.ds * (self.Y - self.do) * self.B / (self.Y * self.Nps)  # Approximation of shell flow area
+
+    @property
+    def dseff(self):
+        return self.ds * (self.As / self.Apipe)
+
+    def K(self, sigma, Ret):
+        Ret = np.clip(Ret, 3000, 10000)
+        sigma = np.clip(sigma, 0, 1)
+
+        Kc = scipy.interpolate.griddata(self.dfKc[:, :-1], self.dfKc[:, -1], (Ret, sigma), 'cubic')
+        Ke = scipy.interpolate.griddata(self.dfKe[:, :-1], self.dfKe[:, -1], (Ret, sigma), 'cubic')
+
+        return Kc + Ke
+
+    def chicSolver(self, pump):
+        """Find intersection of pump and HX characteristic to set operating point.
+        The HX flow path to use is inferred from pump.pump_type.
+
+        Args:
+            pump (Pump object): Pump design.
+
+        Returns:
+            (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
+        """
+
+        if pump.pump_type is Pump.HOT:
+            rho = self.hotStream["rho"]
+            hx_dp = self.hydraulicAnalysisTube
+
+            # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
+        else:
+            rho = self.coldStream["rho"]
+            hx_dp = self.hydraulicAnalysisShell
+
+        def f(mdot):
+            return hx_dp(mdot) - pump.dp(mdot / rho)
+
+        solution = root_scalar(f, bracket=[0.001, 1])
+
+        if not solution.converged:
+            raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
+        else:
+            return solution.root, pump.dp(solution.root / rho)
 
     def hydraulicAnalysisTube(self, mdot, verbose=False):
         """Perform pressure drop analysis on tube flow path for given mdot.
@@ -171,11 +243,16 @@ class HX:
 
         # Haaland's approximation of Colebrook-White for Darcy friction factor
         fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
-        dpFric = fTube * (self.lt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2) * self.Npt
+        dpFric = fTube * (self.lt * self.Npt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
+<<<<<<< HEAD
         Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Rennels")
         Ktot = K(self.sigma, Ret) + (self.Npt - 1)*(Kreturn)
+=======
+        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y / 2, Re=Ret, method="Rennels")
+        Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn
+>>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
@@ -206,15 +283,13 @@ class HX:
         """
 
         # Shell loss
-        self.As = self.ds * (self.Y - self.do) * self.B / (self.Y * self.Nps)  # Approximation of shell flow area
         Vs = mdot / (self.coldStream["rho"] * self.As)
 
-        self.dseff = self.ds * (self.As / self.Apipe)
         Res = self.coldStream["rho"] * Vs * self.dseff / self.coldStream["mu"]
 
         a = 0.34 if self.isSquare else 0.2
 
-        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.coldStream["rho"] * (Vs ** 2)
+        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.Npt * self.coldStream["rho"] * (Vs ** 2)
 
         # Nozzle loss
         Vn = mdot / (self.hotStream["rho"] * self.An)
@@ -225,6 +300,7 @@ class HX:
         if verbose:
             print(f"\nSHELL HYDRAULIC ANALYSIS SUMMARY FOR mdot = {mdot:.2f} kg/s\n")
             print(f"Shell flow area: {self.As:.6f} m^2")
+
             print(f"Shell characteristic velocity: {Vs:.2f} m/s")
             print(f"Shell Reynolds number: {Res:.0f}")
             print(f"Total pressure drop: {shellTotaldp:.0f} Pa (shell {shelldp1:.0f},"
@@ -300,8 +376,9 @@ class HX:
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
             T2 = Tho_ - Tci
-            return np.where(np.isclose(T1, T2), T1, (T1 - T2) / np.log(T1 / T2))
+            return T1 if np.isclose(T1, T2) else (T1 - T2) / np.log(T1 / T2)
 
+<<<<<<< HEAD
         def ToSolve(F):
             """For a given correction factor, solve for output temperatures and heat transfer.
 
@@ -310,10 +387,23 @@ class HX:
 
             Raises:
                 AssertionError: If solver cannot converge on low optimality To.
+=======
+        # error function for LMTD solver
+        def f(To: np.ndarray):
+            """
+            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT
+
+            Args:
+                To (np.ndarray): [Tho, Tco]
+
+            Returns:
+                dQ (ndarray): [dQ1,dQ2]
+>>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
             Returns:
                 (float, float, float): Heat transfer, W, hot stream outlet temperature, C, cold stream outlet temperature, C.
             """
+<<<<<<< HEAD
 
             # error function for LMTD solver
             def f(To):
@@ -364,6 +454,22 @@ class HX:
             print(f"Heat transfer rate Q = {Q/1000:.2f} kW, temperature delta correction F = {F:.3f}.")
             print(f"mdotc = {mdot_t[0]:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
             print(f"mdoth = {mdot_s[0]:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
+=======
+            Tho, Tco = To
+            Q = HA * LMTD(Tho, Tco) * self.F
+            return np.array(
+                (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
+
+        # initial guess of outlet temperatures
+        x0 = np.array([55, 25])  # least squares solver sets errors to zero, optimising for outlet temperatures
+        res = root(f, x0)
+        if not res.success:
+            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer")
+        # recover vectors of outlet temperatures
+        Tho, Tco = res.x
+
+        Q = HA * LMTD(Tho, Tco)
+>>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         return Q
 

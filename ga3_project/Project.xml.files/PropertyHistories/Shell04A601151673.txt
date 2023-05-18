@@ -1,0 +1,6 @@
+Shell & Tube Heat Exchanger - Tube Side - 0
+
+{Flow Element Results,Generic}Total mass flow
+Sample based. Number of Samples : 100, SampleRate: 10
+Run  Time [s]          (kg/s)
+000, 0.00000000E+000,  4.70698446E-001
