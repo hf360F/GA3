@@ -16,7 +16,7 @@ import scipy
 import fluids.fittings as ft
 from scipy.optimize import least_squares, root
 
-def F(P, R, Nps):
+def Flookup(P, R, Nps):
     """Temperature delta correction factor, for Q = HAF * LMTD.
 
     Args:
@@ -38,7 +38,6 @@ def F(P, R, Nps):
     P = np.clip(P, 0, 1)
 
     F = scipy.interpolate.griddata(df[:, :-1], df[:, -1], np.column_stack((R, P)), "cubic")
-    print(F)
 
     return F
 
@@ -78,12 +77,11 @@ def chicSolver(hx, pump):
     if pump.pump_type is Pump.HOT:
         rho = hx.hotStream["rho"]
         hx_dp = hx.hydraulicAnalysisTube
-
-        # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
     else:
         rho = hx.coldStream["rho"]
         hx_dp = hx.hydraulicAnalysisShell
 
+    # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
     def f(mdot):
         return hx_dp(mdot) - pump.dp(mdot / rho)
 
@@ -136,7 +134,6 @@ class HX:
         self.ds = ds
         self.dn = dn
         self.variable = np.ones(1)
-        self.F=0.9
 
         if Nps != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
@@ -179,7 +176,6 @@ class HX:
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
         Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Rennels")
         Ktot = K(self.sigma, Ret) + (self.Npt - 1)*(Kreturn)
-        
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
@@ -263,16 +259,16 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self, mdot_t: float | np.ndarray, mdot_s: float | np.ndarray, verbose: bool = False) -> float | np.ndarray:
+    def thermalAnalysis(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
         """
         Perform thermal analysis on the HX given the 2 mass flowrates.
 
         Args:
-            mdot_t (float|np.ndarray): Tube mass flow, kg/s.
-            mdot_s (float|np.ndarray): Shell mass flow, kg/s
+            mdot_t (float): Tube mass flow, kg/s.
+            mdot_s (float): Shell mass flow, kg/s
 
         Returns:
-            Q (float|np.ndarray): Resultant heat transfer rate, W.
+            Q (float): Resultant heat transfer rate, W.
         """
         # Reynolds numbers
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
@@ -295,8 +291,8 @@ class HX:
         # H = 9878
 
         # inlet temps
-        Thi = self.hotStream["Ti"] * np.ones_like(mdot_t)
-        Tci = self.coldStream["Ti"] * np.ones_like(mdot_s)
+        Thi = self.hotStream["Ti"]
+        Tci = self.coldStream["Ti"]
 
         # SFEE
         HA = H * np.pi * self.di * self.lt * self.Nt * self.Npt
@@ -306,41 +302,68 @@ class HX:
             T2 = Tho_ - Tci
             return np.where(np.isclose(T1, T2), T1, (T1 - T2) / np.log(T1 / T2))
 
-        # error function for LMTD solver
-        def f(To: np.ndarray):
-            """
-            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT. Input vector is concatenation of estimates of Tho
-            then Tco.
+        def ToSolve(F):
+            """For a given correction factor, solve for output temperatures and heat transfer.
 
             Args:
-                To (np.ndarray): Array containing estimates of Tho and Tco, with shape (2n,), n number of configurations
+                F (float): Value of temperature delta correction factor.
+
+            Raises:
+                AssertionError: If solver cannot converge on low optimality To.
 
             Returns:
-                dQ (float|np.ndarray): Array of errors in Q between 2 methods, of same shape as input vector (2n,)
-
+                (float, float, float): Heat transfer, W, hot stream outlet temperature, C, cold stream outlet temperature, C.
             """
-            Tho, Tco = np.split(To, 2)
-            Q = HA * LMTD(Tho, Tco) * self.F
-            return np.concatenate(
-                (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
 
-        # initial guess of outlet temperatures
-        x0 = np.repeat([40, 30], mdot_s.shape[0])
-        # least squares solver sets errors to zero, optimising for outlet temperatures
-        res = least_squares(f, x0, bounds=(np.tile(Tci, 2), np.tile(Thi, 2)))
-        if res.optimality > 1e-3:
-            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
-        # recover vectors of outlet temperatures
-        Tho, Tco = np.split(res.x, 2)
+            # error function for LMTD solver
+            def f(To):
+                """
+                Returns error between Q calculated by LMTD.H.A.F and m.cp.dT.
 
-        Q = HA * LMTD(Tho, Tco)
+                Args
+                    To (float, float): Hot and cold stream outlet temperatures, C. 
+
+                Returns:
+                    (float, float): Vector of dQs when found by LMTD H A F = (mdotcpdT)_hot and LMTD H A F = (mdotcpdT)_cold.
+
+                """
+
+                Tho = To[0]
+                Tco = To[1]
+
+                Q = HA * LMTD(Tho, Tco) * F
+        
+                return np.concatenate(
+                    (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
+
+            # initial guess of outlet temperatures
+            x0 = (40, 30)
+            # least squares solver sets errors to zero, optimising for outlet temperatures
+            res = least_squares(f, x0, bounds=(Tci, Thi))
+            if res.optimality > 1e-3:
+                raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
+            # recover vectors of outlet temperatures
+            Tho, Tco = np.split(res.x, 2)
+
+            return (HA * LMTD(Tho, Tco) * F)[0], Tho[0], Tco[0]
+
+        relTol = 1E-6
+        F = 1 # Initial guess
+        Qold, Tho, Tco = ToSolve(F)
+        Q = Qold*(1+(2*relTol)) # Some value outside of tolerance
+
+        while abs(Q-Qold) > relTol*Qold:
+            P = ((Tco-Tci))/(Thi - Tci)
+            F = Flookup(P=P, R=(mdot_t/mdot_s), Nps=self.Nps)[0] # Update next F based on Q
+            Qold = Q
+            Q, Tho, Tco = ToSolve(F)
 
         if verbose:
-            for i in range(len(Q)):
-                print(f"\nHX THERMAL ANALYSIS FOR HEAT EXCHANGER {i}\n")
-                print(f"Heat transfer rate Q = {Q[i]/1000:.2f} kW.")
-                print(f"mdotc = {mdot_t[i]:.3f} kg/s, Tco = {Tco[i]:.2f} C, deltaTc = {(Tco[i] - self.coldStream['Ti']):.2f} C.")
-                print(f"mdoth = {mdot_s[i]:.3f} kg/s, Tho = {Tho[i]:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho[i]):.2f} C.\n")
+            #print(mdot_t, mdot_s)
+            print(f"\nHX THERMAL ANALYSIS SUMMARY\n")
+            print(f"Heat transfer rate Q = {Q/1000:.2f} kW, temperature delta correction F = {F:.3f}.")
+            print(f"mdotc = {mdot_t[0]:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
+            print(f"mdoth = {mdot_s[0]:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
 
         return Q
 
