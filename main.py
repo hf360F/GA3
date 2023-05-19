@@ -398,7 +398,6 @@ class HX:
         # recover vectors of outlet temperatures
         Tho, Tco = res.x
         F = Flookup(P=(Tco - Tci) / (Thi - Tci), R=(mdot_t / mdot_s), Nps=self.Nps)
-        print((Tco - Tci) / (Thi - Tci))
         Q = HA * LMTD(Tho, Tco) * F
 
         if verbose:
