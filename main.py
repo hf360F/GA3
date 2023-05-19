@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-from scipy.optimize import root, root_scalar
+from scipy.optimize import root, root_scalar, least_squares
 
 
 def Flookup(P, R, Nps):
@@ -63,22 +63,6 @@ def K(sigma, Ret):
 
     return Kc[0] + Ke[0]
 
-<<<<<<< HEAD
-=======
-
-def F(P, R, Nps):
-    """Temperature delta correction factor for one or two shell passes.
-
-    Args:
-        P (_type_): _description_
-        R (_type_): _description_
-        Nps (int): Number of shell passes
-    """
-
-    pass
-
-
->>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 def chicSolver(hx, pump):
     """Find intersection of pump and HX characteristic to set operating point.
     The HX flow path to use is inferred from pump.pump_type.
@@ -150,14 +134,9 @@ class HX:
         self.G = G
         self.ds = ds
         self.dn = dn
-<<<<<<< HEAD
-        self.variable = np.ones(1)
-=======
-        self.F = 0.9
 
         self.dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
         self.dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
->>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         if Nps != 1:
             raise (NotImplementedError("F factor for multi-pass setups not implemented yet"))
@@ -246,13 +225,8 @@ class HX:
         dpFric = fTube * (self.lt * self.Npt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
-<<<<<<< HEAD
-        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y/2, Re=Ret, method="Rennels")
-        Ktot = K(self.sigma, Ret) + (self.Npt - 1)*(Kreturn)
-=======
         Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y / 2, Re=Ret, method="Rennels")
         Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn
->>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
@@ -378,7 +352,6 @@ class HX:
             T2 = Tho_ - Tci
             return T1 if np.isclose(T1, T2) else (T1 - T2) / np.log(T1 / T2)
 
-<<<<<<< HEAD
         def ToSolve(F):
             """For a given correction factor, solve for output temperatures and heat transfer.
 
@@ -387,23 +360,10 @@ class HX:
 
             Raises:
                 AssertionError: If solver cannot converge on low optimality To.
-=======
-        # error function for LMTD solver
-        def f(To: np.ndarray):
-            """
-            Returns error between Q calculated by LMTD.H.A.F and m.cp.dT
-
-            Args:
-                To (np.ndarray): [Tho, Tco]
-
-            Returns:
-                dQ (ndarray): [dQ1,dQ2]
->>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
             Returns:
                 (float, float, float): Heat transfer, W, hot stream outlet temperature, C, cold stream outlet temperature, C.
             """
-<<<<<<< HEAD
 
             # error function for LMTD solver
             def f(To):
@@ -454,22 +414,6 @@ class HX:
             print(f"Heat transfer rate Q = {Q/1000:.2f} kW, temperature delta correction F = {F:.3f}.")
             print(f"mdotc = {mdot_t[0]:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
             print(f"mdoth = {mdot_s[0]:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
-=======
-            Tho, Tco = To
-            Q = HA * LMTD(Tho, Tco) * self.F
-            return np.array(
-                (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
-
-        # initial guess of outlet temperatures
-        x0 = np.array([55, 25])  # least squares solver sets errors to zero, optimising for outlet temperatures
-        res = root(f, x0)
-        if not res.success:
-            raise AssertionError(f"Could not solve for outlet temperatures and heat transfer")
-        # recover vectors of outlet temperatures
-        Tho, Tco = res.x
-
-        Q = HA * LMTD(Tho, Tco)
->>>>>>> 3799154b146f06bb96d55df698a02ad5cac0a56a
 
         return Q
 
