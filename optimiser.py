@@ -35,7 +35,7 @@ def num_passes():
     hx.hydraulicAnalysisShell(mdot_c, True)
 
     print(mdot_h, mdot_c)
-    print(hx.thermalAnalysis(mdot_h, mdot_c))
+    print(hx.thermalAnalysis(mdot_h, mdot_c, True))
 
 
 if __name__ == "__main__":
