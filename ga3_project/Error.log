@@ -1,4 +1,4 @@
-Fan or Pump - 12
-WARNING, Interpolation out of range, Solve Steady State
-Fan or Pump - 13
-WARNING, Interpolation out of range, Solve Steady State
+Shell & Tube Heat Exchanger - Shell Side - 1
+WARNING, Reynolds number out of range when interpolating for friction factor, Solve Steady State
+Shell & Tube Heat Exchanger - Tube Side - 0
+WARNING, Roughness/Diameter < 1E-06 or > 0.01. This is outside of the validity range for the correlation, Solve Steady State

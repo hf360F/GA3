@@ -16,6 +16,8 @@ import pandas as pd
 import scipy
 from scipy.optimize import root, root_scalar
 
+from GA3_CONSTS import *
+
 
 def Flookup(P, R, Nps):
     """Temperature delta correction factor, for Q = HAF * LMTD.
@@ -171,6 +173,22 @@ class HX:
     @property
     def dseff(self):
         return self.ds * (self.As / self.Apipe)
+
+    @property
+    def mass(self):
+        tube = M_TUBE * self.Nt * self.lt
+        nozzles = M_NOZZLE * 4
+        baffles = M_BAFFLE * self.Nb * (self.Apipe - 0.25 * self.Nt * np.pi * self.do ** 2)
+        match self.Nt % 2:
+            case 0:
+                shell = M_SHELL * (self.lt + 0.04 * 2)
+                ends = M_ENDS * ((2 * 0.00635 + 2 * 0.008 * (1 - self.Attot / self.Apipe)) * np.pi * self.ds ** 2 / 4)
+            case 1:
+                shell = M_SHELL * (self.lt + 0.04)
+                ends = M_ENDS * ((2 * 0.00635 + 0.008 * (1 - self.Attot / self.Apipe)) * np.pi * self.ds ** 2 / 4)
+            case _:
+                raise ValueError("math broke")
+        return tube + nozzles + baffles + shell + ends
 
     def K(self, sigma, Ret):
         Ret = np.clip(Ret, 3000, 10000)
@@ -354,20 +372,6 @@ class HX:
             T2 = Tho_ - Tci
             return T1 if np.isclose(T1, T2) else (T1 - T2) / np.log(T1 / T2)
 
-        # def ToSolve(F):
-        #     """For a given correction factor, solve for output temperatures and heat transfer.
-        #
-        #     Args:
-        #         F (float): Value of temperature delta correction factor.
-        #
-        #     Raises:
-        #         AssertionError: If solver cannot converge on low optimality To.
-        #
-        #     Returns:
-        #         (float, float, float): Heat transfer, W, hot stream outlet temperature, C, cold stream outlet temperature, C.
-        #     """
-        #
-        #     # error function for LMTD solver
         def f(x):
             """
             Returns error between Q calculated by LMTD.H.A.F and m.cp.dT.
@@ -393,11 +397,11 @@ class HX:
             raise AssertionError(f"Could not solve for outlet temperatures and heat transfer.")
         # recover vectors of outlet temperatures
         Tho, Tco = res.x
-        F = Flookup(P=(Tco - Tci) / (Thi - Tci), R=(mdot_t / mdot_s), Nps=self.Nps)  # Update next F based on Q
+        F = Flookup(P=(Tco - Tci) / (Thi - Tci), R=(mdot_t / mdot_s), Nps=self.Nps)
+        print((Tco - Tci) / (Thi - Tci))
         Q = HA * LMTD(Tho, Tco) * F
 
         if verbose:
-            # print(mdot_t, mdot_s)
             print(f"\nHX THERMAL ANALYSIS SUMMARY\n")
             print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, temperature delta correction F = {F:.3f}.")
             print(f"mdotc = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
@@ -437,9 +441,5 @@ class Pump:
         :param flowrate: The required flowrate, m^3/s
         :return: The total pressure rise, Pa.
         """
-
-        # if (flowrate > self.flowMax) or (flowrate < self.flowMin):
-        #     warnings.warn(f"Flowrate {flowrate:.5f} m^3/s lies outside of "
-        #                   f"pump curve domain ({self.flowMin:.5f} to {self.flowMax:.5f})")
 
         return np.clip(self.poly(flowrate), 0, None)
