@@ -4,9 +4,9 @@ import numpy as np
 from main import Pump
 
 
-def plot_pump_data():
-    cold = Pump(Pump.COLD)
-    hot = Pump(Pump.HOT)
+def plot_pump_data(year):
+    cold = Pump(Pump.COLD,year)
+    hot = Pump(Pump.HOT,year)
 
     n = 100
     rhoHot = rhoCold = 940
@@ -34,5 +34,5 @@ def plot_pump_data():
 
 
 if __name__ == "__main__":
-    plot_pump_data()
+    [plot_pump_data(y) for y in (2017,2018,2020,2022)]
     plt.show()

@@ -67,37 +67,6 @@ def K(sigma, Ret):
     return Kc[0] + Ke[0]
 
 
-def chicSolver(hx, pump):
-    """Find intersection of pump and HX characteristic to set operating point.
-    The HX flow path to use is inferred from pump.pump_type.
-    
-    Args:
-        hx (HX object): Heat exchanger design.
-        pump (Pump object): Pump design.
-
-    Returns:
-        (float, float): Mass flow rate, kg/s, and HX pressure drop (= pump pressure rise), Pa
-    """
-
-    if pump.pump_type is Pump.HOT:
-        rho = hx.hotStream["rho"]
-        hx_dp = hx.hydraulicAnalysisTube
-    else:
-        rho = hx.coldStream["rho"]
-        hx_dp = hx.hydraulicAnalysisShell
-
-    # We have found the intersection of the curves when pressure change over pump and HX sum to zero:
-    def f(mdot):
-        return hx_dp(mdot) - pump.dp(mdot / rho)
-
-    solution = root(f, x0=0.2 * np.ones_like(hx.Nt))
-
-    if not solution.success:
-        raise ValueError("Unable to intersect pump and heat exchanger characteristics!")
-    else:
-        return solution.x, pump.dp(solution.x / rho)
-
-
 class HX:
     def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, G, ds, dn):
         """Heat exchanger design class.
@@ -147,7 +116,7 @@ class HX:
 
     @property
     def Attot(self):
-        return self.Nt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
+        return self.Nt / self.Npt * self.di ** 2 * np.pi / 4  # Tube total flowpath area, m^2
 
     @property
     def Apipe(self):
@@ -155,8 +124,7 @@ class HX:
 
     @property
     def sigma(self):
-        return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (
-                self.Apipe * 2)  # Note scaling with number of tube passes
+        return self.Npt * self.Attot / self.Apipe
 
     @property
     def An(self):
@@ -179,16 +147,11 @@ class HX:
         tube = M_TUBE * self.Nt * self.lt
         nozzles = M_NOZZLE * 4
         baffles = M_BAFFLE * self.Nb * (self.Apipe - 0.25 * self.Nt * np.pi * self.do ** 2)
-        match self.Nt % 2:
-            case 0:
-                shell = M_SHELL * (self.lt + 0.04 * 2)
-                ends = M_ENDS * ((2 * 0.00635 + 2 * 0.008 * (1 - self.Attot / self.Apipe)) * np.pi * self.ds ** 2 / 4)
-            case 1:
-                shell = M_SHELL * (self.lt + 0.04)
-                ends = M_ENDS * ((2 * 0.00635 + 0.008 * (1 - self.Attot / self.Apipe)) * np.pi * self.ds ** 2 / 4)
-            case _:
-                raise ValueError("math broke")
-        return tube + nozzles + baffles + shell + ends
+        shell = M_SHELL * ((self.lt + 2 * END_WASTAGE) + 0.04 * 2)
+        ends = M_ENDS * ((2 * 0.00635 * self.Apipe + 2 * 0.008 * (1 - self.sigma)) * self.Apipe)
+        orings = M_ORING_L * 4 + M_ORING_S * self.Nt
+
+        return tube + nozzles + baffles + shell + ends + orings
 
     def K(self, sigma, Ret):
         Ret = np.clip(Ret, 3000, 10000)
@@ -252,7 +215,7 @@ class HX:
 
         # Nozzle loss
         Vn = mdot / (self.hotStream["rho"] * self.An)
-        dpNozzles = 2 * 0.5 * self.hotStream["rho"] * (Vn ** 2)
+        dpNozzles = 0.5 * self.hotStream["rho"] * (Vn ** 2)
 
         tubeTotaldP = dpFric + dpMinor + dpNozzles
 
@@ -283,11 +246,11 @@ class HX:
 
         a = 0.34 if self.isSquare else 0.2
 
-        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.Npt * self.coldStream["rho"] * (Vs ** 2)
+        shelldp1 = 4 * a * (Res ** (-0.15)) * self.Nt * self.coldStream["rho"] * (Vs ** 2)
 
         # Nozzle loss
         Vn = mdot / (self.hotStream["rho"] * self.An)
-        dpNozzles = 2 * 0.5 * self.coldStream["rho"] * (Vn ** 2)
+        dpNozzles = 0.5 * self.coldStream["rho"] * (Vn ** 2)
 
         shellTotaldp = shelldp1 + dpNozzles
 
@@ -358,6 +321,7 @@ class HX:
 
         # total ht coeff
         H = 1 / (1 / hi + self.di * np.log(self.do / self.di) / 2 / self.kt + self.di / self.do / ho)
+        print(f'H: {H:2f}')
         # H = 9878
 
         # inlet temps
@@ -365,7 +329,7 @@ class HX:
         Tci = self.coldStream["Ti"]
 
         # SFEE
-        HA = H * np.pi * self.di * self.lt * self.Nt * self.Npt
+        HA = H * np.pi * self.di * self.lt * self.Nt
 
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
@@ -413,7 +377,7 @@ class HX:
 class Pump:
     COLD, HOT = range(2)
 
-    def __init__(self, pump_type: int) -> None:
+    def __init__(self, pump_type: int, year: int) -> None:
         """
         Pump characteristics class.
         :param pump_type: The pump variety, one of Pump.COLD and Pump.HOT.
@@ -427,7 +391,10 @@ class Pump:
             case _:
                 raise "invalid pump type"
 
-        data = np.genfromtxt(f"data/{type_str}.csv", delimiter=',')
+        year = 2020 if year == 2019 else year
+        assert year in (2017, 2018, 2020, 2022)
+
+        data = np.genfromtxt(f"data/{type_str}-{year}.csv", delimiter=',')
         self.flowrate_data = data[:, 0]
         self.flowMin = np.min(data[:, 0])
         self.flowMax = np.max(data[:, 0])

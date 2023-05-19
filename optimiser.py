@@ -1,6 +1,4 @@
-import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 
 import main as ga3
@@ -9,36 +7,29 @@ from GA3_CONSTS import *
 
 
 def num_passes():
-    Npt = 1
+    Npt = 2
     Nps = 1
     Nt = 12
-    lt = np.min((LT_TOTAL / (Nt * Npt), LT_MAX_1P))  # tube lengths
+    lt = 0.25 - 2 * END_WASTAGE  # tube lengths
 
     tube_arr = pd.read_csv("data/tube-arrangements.csv")
     tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
-    Y = 0.064/6 # (DS / 0.064) * tube_interp(Nt * Npt) / 1000  # tube pitch (reference diameter for data weas 0.064)
+    Y = (DS / 0.064) * tube_interp(Nt) / 1000  # tube pitch (reference diameter for data weas 0.064)
 
-    Nb = 9
+    Nb = 13
 
     isSquare = False
     G = 0.2 * DS
 
     hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, G, DS, DN)
-    hpump = ga3.Pump(ga3.Pump.HOT)
-    cpump = ga3.Pump(ga3.Pump.COLD)
 
-    mdot_h, dp_h = hx.chicSolver(hpump)
-    mdot_c, dp_c = hx.chicSolver(cpump)
+    hpump_22 = ga3.Pump(ga3.Pump.HOT, 2022)
+    cpump_22 = ga3.Pump(ga3.Pump.COLD, 2022)
 
-    hx.hydraulicAnalysisTube(mdot_h, True)
-    hx.hydraulicAnalysisShell(mdot_c, True)
-    hx.thermalAnalysis(mdot_h, mdot_c, True)
+    mdot_h, dp_h = hx.chicSolver(hpump_22)
+    mdot_c, dp_c = hx.chicSolver(cpump_22)
 
-    print(hx.mass)
-
-    ppd.plot_pump_data()
-    hx.plotHXChics(0.01,1)
-
+    Q = hx.thermalAnalysis(mdot_h, mdot_c)
 
 
 

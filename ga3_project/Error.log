@@ -1,4 +1,5 @@
 Shell & Tube Heat Exchanger - Shell Side - 1
 WARNING, Reynolds number out of range when interpolating for friction factor, Solve Steady State
 Shell & Tube Heat Exchanger - Tube Side - 0
-WARNING, Roughness/Diameter < 1E-06 or > 0.01. This is outside of the validity range for the correlation, Solve Steady State
+WARNING, Enthalpy of 211.1330 kJ/kg out of range (too high) when interpolating table for Temperature in material H2O - Water, Solve Steady State
+WARNING, Temperature of 50.4102 °C out of range (too high) when interpolating table for Density in material H2O - Water, Solve Steady State
