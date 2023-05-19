@@ -11,7 +11,7 @@ def num_passes():
     Npt = 1
     Nps = 1
     Nt = 13
-    lt = np.clip(LT_TOTAL / (Nt * Npt), None, LT_MAX_1P)  # tube lengths
+    lt = np.min((LT_TOTAL / (Nt * Npt), LT_MAX_1P))  # tube lengths
 
     tube_arr = pd.read_csv("data/tube-arrangements.csv")
     tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
