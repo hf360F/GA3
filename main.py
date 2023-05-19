@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-from scipy.optimize import root, root_scalar, least_squares
+from scipy.optimize import root, root_scalar
 
 
 def Flookup(P, R, Nps):
@@ -33,14 +33,16 @@ def Flookup(P, R, Nps):
     elif Nps == 2:
         df = pd.read_csv("data/F2pass.csv").to_numpy()
     else:
-        raise(ValueError("Data for temperature delta correction only supports 1 or 2 shell passes"))
+        raise (ValueError("Data for temperature delta correction only supports 1 or 2 shell passes"))
 
     R = np.clip(R, 0.4, 2)
-    P = np.clip(P, 0, 1)
+    P = np.clip(P, 0.17, 0.785)
 
-    F = scipy.interpolate.griddata(df[:, :-1], df[:, -1], np.column_stack((R, P)), "cubic")
+    F = scipy.interpolate.griddata(df[:, :-1], df[:, -1], np.column_stack((R, P)), "cubic")[0]
+    print(R, P, F)
 
     return F
+
 
 def K(sigma, Ret):
     """Sum of inlet and exit tube loss factors.
@@ -62,6 +64,7 @@ def K(sigma, Ret):
     Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
 
     return Kc[0] + Ke[0]
+
 
 def chicSolver(hx, pump):
     """Find intersection of pump and HX characteristic to set operating point.
@@ -152,7 +155,7 @@ class HX:
     @property
     def sigma(self):
         return self.Attot / self.Apipe if self.Npt % 2 == 1 else self.Attot / (
-                    self.Apipe * 2)  # Note scaling with number of tube passes
+                self.Apipe * 2)  # Note scaling with number of tube passes
 
     @property
     def An(self):
@@ -378,42 +381,38 @@ class HX:
 
                 """
 
-                Tho = To[0]
-                Tco = To[1]
-
+                Tho, Tco = To
                 Q = HA * LMTD(Tho, Tco) * F
-        
-                return np.concatenate(
-                    (mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q))
+                return mdot_t * self.hotStream["cp"] * (Thi - Tho) - Q, mdot_s * self.coldStream["cp"] * (Tco - Tci) - Q
 
             # initial guess of outlet temperatures
-            x0 = (40, 30)
+            x0 = np.array((55, 25))
             # least squares solver sets errors to zero, optimising for outlet temperatures
-            res = least_squares(f, x0, bounds=(Tci, Thi))
-            if res.optimality > 1e-3:
-                raise AssertionError(f"Could not solve for outlet temperatures and heat transfer, optimality={res.optimality}")
+            res = root(f, x0)
+            if not res.success:
+                raise AssertionError(f"Could not solve for outlet temperatures and heat transfer.")
             # recover vectors of outlet temperatures
-            Tho, Tco = np.split(res.x, 2)
+            Tho, Tco = res.x
 
-            return (HA * LMTD(Tho, Tco) * F)[0], Tho[0], Tco[0]
+            return (HA * LMTD(Tho, Tco) * F), Tho, Tco
 
         relTol = 1E-6
-        F = 1 # Initial guess
+        F = 1.  # Initial guess
         Qold, Tho, Tco = ToSolve(F)
-        Q = Qold*(1+(2*relTol)) # Some value outside of tolerance
+        Q = Qold * (1 + (2 * relTol))  # Some value outside of tolerance
 
-        while abs(Q-Qold) > relTol*Qold:
-            P = ((Tco-Tci))/(Thi - Tci)
-            F = Flookup(P=P, R=(mdot_t/mdot_s), Nps=self.Nps)[0] # Update next F based on Q
+        while abs(Q - Qold) > relTol * Qold:
+            P = (Tco - Tci) / (Thi - Tci)
+            F = Flookup(P=P, R=(mdot_t / mdot_s), Nps=self.Nps)  # Update next F based on Q
             Qold = Q
             Q, Tho, Tco = ToSolve(F)
 
         if verbose:
-            #print(mdot_t, mdot_s)
+            # print(mdot_t, mdot_s)
             print(f"\nHX THERMAL ANALYSIS SUMMARY\n")
-            print(f"Heat transfer rate Q = {Q/1000:.2f} kW, temperature delta correction F = {F:.3f}.")
-            print(f"mdotc = {mdot_t[0]:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
-            print(f"mdoth = {mdot_s[0]:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
+            print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, temperature delta correction F = {F:.3f}.")
+            print(f"mdotc = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
+            print(f"mdoth = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
 
         return Q
 
