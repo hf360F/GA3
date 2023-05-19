@@ -1,0 +1,5 @@
+Operating system: Microsoft Windows 11 Home
+Logged in user name: elhc1
+Machine name: DELL-G5
+User:  Time: 19/05/2023 09:11:28 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User:  Time: 19/05/2023 09:11:39 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
