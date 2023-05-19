@@ -4,6 +4,9 @@ import pandas as pd
 import main as ga3
 from GA3_CONSTS import *
 
+coldPump = ga3.Pump(ga3.Pump.COLD)
+hotPump = ga3.Pump(ga3.Pump.HOT)
+
 Nt = 13 # number of tubes
 lt = 3.5 / Nt  # tube lengths
 Y = 0.014 # tube pitch
@@ -19,4 +22,10 @@ G = 0.2 * DS
 
 hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, G, DS, DN)
 
-hx.hydraulicAnalysisTube(mdot=0.5, verbose=True)
+mdotc = ga3.chicSolver(hx, coldPump)[0] # Tube
+mdoth = ga3.chicSolver(hx, hotPump)[0] # Shell
+
+Q = hx.thermalAnalysis(mdot_t = mdotc, mdot_s = mdoth, verbose = True)
+
+#hx.plotHXChics()
+#ga3.chicSolver()
