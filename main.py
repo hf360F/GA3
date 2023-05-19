@@ -68,7 +68,7 @@ def K(sigma, Ret):
 
 
 class HX:
-    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, G, ds, dn):
+    def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, B, G, ds, dn):
         """Heat exchanger design class.
 
         Args:
@@ -104,6 +104,7 @@ class HX:
         self.Nps = Nps
         self.Npt = Npt
         self.Nb = Nb
+        self.B = B
         self.G = G
         self.ds = ds
         self.dn = dn
@@ -130,13 +131,13 @@ class HX:
     def An(self):
         return self.dn ** 2 * np.pi / 4
 
-    @property
-    def B(self):
-        return self.lt / (self.Nb + 1)
+    # @property
+    # def B(self):
+    #     return self.lt / (self.Nb + 1)
 
     @property
     def As(self):
-        return self.ds * (self.Y - self.do) * self.B / (self.Y * self.Nps)  # Approximation of shell flow area
+        return self.ds * self.B * (1 - self.do / self.Y) / self.Nps  # Approximation of shell flow area
 
     @property
     def dseff(self):
@@ -305,7 +306,7 @@ class HX:
         """
         # Reynolds numbers
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
-        Res = mdot_s * self.ds * (self.As / self.Apipe) / self.As / self.coldStream["mu"]
+        Res = mdot_s * self.dseff / self.As / self.coldStream["mu"]
 
         # Pr and geometry constant are const
         Pr = 4.31
@@ -321,8 +322,6 @@ class HX:
 
         # total ht coeff
         H = 1 / (1 / hi + self.di * np.log(self.do / self.di) / 2 / self.kt + self.di / self.do / ho)
-        print(f'H: {H:2f}')
-        # H = 9878
 
         # inlet temps
         Thi = self.hotStream["Ti"]
