@@ -25,7 +25,7 @@ hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, N
 mdotc = ga3.chicSolver(hx, coldPump)[0] # Tube
 mdoth = ga3.chicSolver(hx, hotPump)[0] # Shell
 
-Q = hx.thermalAnalysis(mdot_t = mdotc, mdot_s = mdoth, verbose = True)
+Q = hx.thermalAnalysis_LMTD(mdot_t = mdotc, mdot_s = mdoth, verbose = True)
 
 #hx.plotHXChics()
 #ga3.chicSolver()

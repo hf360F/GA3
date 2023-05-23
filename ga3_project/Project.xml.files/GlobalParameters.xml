@@ -39,5 +39,26 @@
   <Library Name="IPS.VideoRecorder" Version="1.0.0.0" />
   <Library Name="IPS.Visualisation" Version="8.14.1.0" />
   <Library Name="NistFluidGenerator" Version="1.0.8314.0" />
-  <IPS.GlobalParameters.GlobalParameterList />
+  <IPS.GlobalParameters.GlobalParameterList>
+    <ListItems>
+      <IPS.GlobalParameters.GlobalParameter>
+        <Properties>Name Unit UnitGroup Value </Properties>
+        <Item Index="0">
+          <Values>  "Baffle Passes" "&amp;lt; No Unit &amp;gt;" "None" "10.6422805554307" </Values>
+          <List Name="AssociatedProperties">
+            <IPS.GlobalParameters.PropertyAssociationList>
+              <ListItems>
+                <IPS.GlobalParameters.PropertyAssociation>
+                  <Properties>OffsetValue Scale SpecificProperty Unit </Properties>
+                  <Item Index="0">
+                    <Values>  "0" "1" "{COMPONENT}Shell &amp;amp; Tube Heat Exchanger - Shell Side - 1|:|iNumPassG" "&amp;lt; No Unit &amp;gt;" </Values>
+                  </Item>
+                </IPS.GlobalParameters.PropertyAssociation>
+              </ListItems>
+            </IPS.GlobalParameters.PropertyAssociationList>
+          </List>
+        </Item>
+      </IPS.GlobalParameters.GlobalParameter>
+    </ListItems>
+  </IPS.GlobalParameters.GlobalParameterList>
 </IPS>

@@ -28,8 +28,8 @@
         <property name="AllowFloat">True</property>
       </property>
       <property name="IsFloating">false</property>
-      <property name="Location">@1,X=0@1,Y=0</property>
-      <property name="Size">@4,Width=1435@3,Height=567</property>
+      <property name="Location">@1,X=3@3,Y=162</property>
+      <property name="Size">@3,Width=982@3,Height=567</property>
       <property name="IsActive">false</property>
       <property name="Name">c1633f7f-04ee-4071-9825-b2023d6d6b5b</property>
       <property name="TypeName">Document</property>
@@ -46,8 +46,8 @@
         <property name="AllowFloat">True</property>
       </property>
       <property name="IsFloating">false</property>
-      <property name="Location">@1,X=0@1,Y=0</property>
-      <property name="Size">@3,Width=872@3,Height=567</property>
+      <property name="Location">@1,X=3@3,Y=162</property>
+      <property name="Size">@3,Width=872@3,Height=275</property>
       <property name="IsActive">true</property>
       <property name="Name">df521e3b-aab1-4dc0-9ec3-91d8c75b17b8</property>
       <property name="TypeName">Document</property>

@@ -4,12 +4,7 @@
     <string />
     <string>Project Database</string>
     <string>Master Database</string>
-    <string>Master Database\Flow Solver</string>
-    <string>Master Database\Flow Solver\Discharge Nozzles</string>
-    <string>Master Database\Flow Solver\Heat Exchangers</string>
-    <string>Master Database\Flow Solver\Nodes and Boundaries</string>
-    <string>Master Database\Flow Solver\Turbos and Pumps</string>
   </ExpandedNodes>
-  <SelectedItem>Master Database\Flow Solver\Discharge Nozzles\Nozzle</SelectedItem>
-  <TopItem>Master Database\Flow Solver\Containers</TopItem>
+  <SelectedItem>Project Database</SelectedItem>
+  <TopItem>Project Database</TopItem>
 </TreeState>

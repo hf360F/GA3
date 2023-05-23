@@ -293,17 +293,7 @@ class HX:
         plt.grid()
         plt.show()
 
-    def thermalAnalysis(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
-        """
-        Perform thermal analysis on the HX given the 2 mass flowrates.
-
-        Args:
-            mdot_t (float): Tube mass flow, kg/s.
-            mdot_s (float): Shell mass flow, kg/s
-
-        Returns:
-            Q (float): Resultant heat transfer rate, W.
-        """
+    def HA(self, mdot_t, mdot_s):
         # Reynolds numbers
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
         Res = mdot_s * self.dseff / self.As / self.coldStream["mu"]
@@ -323,12 +313,61 @@ class HX:
         # total ht coeff
         H = 1 / (1 / hi + self.di * np.log(self.do / self.di) / 2 / self.kt + self.di / self.do / ho)
 
+        # SFEE
+        HA = H * np.pi * self.di * self.lt * self.Nt
+        return HA
+
+    def thermalAnalysis_NTU(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
+        C1 = mdot_s * COLDSTREAM["cp"]
+        C2 = mdot_t * HOTSTREAM["cp"]
+        Cmin = np.min((C1, C2))
+        Cmax = np.max((C1, C2))
+        NTU = self.HA(mdot_t, mdot_s) / Cmin
+        Cstar = Cmin / Cmax
+
+        if self.Nb<6:
+            raise ValueError("No correlation for Nb<6")
+
+        match self.Npt:
+            case 1:
+                # pure counterflow
+                eta = (1-np.exp(-NTU*(1-Cstar)))
+            case 2:
+                # TEMA-E_1,2 HX
+                Gamma = np.sqrt(1+Cstar**2)
+                eta = 2/((1+Cstar)+Gamma+1/np.tanh(NTU*Gamma/2))
+            case _:
+                raise ValueError("No correlation defined for Npt>2")
+
+        Q = eta * Cmin * (HOTSTREAM["Ti"] - COLDSTREAM["Ti"])
+
+        Tco = COLDSTREAM["Ti"] + Q / C1
+        Tho = HOTSTREAM["Ti"] - Q / C2
+
+        if verbose:
+            print(f"\nHX THERMAL ANALYSIS SUMMARY - NTU\n")
+            print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, NTU = {NTU:.3f}, effectiveness = {eta:.3f}.")
+            print(f"mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {Q / C1:.2f} C.")
+            print(f"mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {Q / C2:.2f} C.\n")
+        return Q
+
+    def thermalAnalysis_LMTD(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
+        """
+        Perform thermal analysis on the HX given the 2 mass flowrates.
+
+        Args:
+            mdot_t (float): Tube mass flow, kg/s.
+            mdot_s (float): Shell mass flow, kg/s.
+            verbose (bool): Indicate verbosity of output.
+
+        Returns:
+            Q (float): Resultant heat transfer rate, W.
+        """
+        HA = self.HA(mdot_t, mdot_s)
+
         # inlet temps
         Thi = self.hotStream["Ti"]
         Tci = self.coldStream["Ti"]
-
-        # SFEE
-        HA = H * np.pi * self.di * self.lt * self.Nt
 
         def LMTD(Tho_, Tco_):
             T1 = Thi - Tco_
@@ -364,10 +403,10 @@ class HX:
         Q = HA * LMTD(Tho, Tco) * F
 
         if verbose:
-            print(f"\nHX THERMAL ANALYSIS SUMMARY\n")
+            print(f"\nHX THERMAL ANALYSIS SUMMARY - LMTD\n")
             print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, temperature delta correction F = {F:.3f}.")
-            print(f"mdotc = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
-            print(f"mdoth = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
+            print(f"mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
+            print(f"mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
 
         return Q
 

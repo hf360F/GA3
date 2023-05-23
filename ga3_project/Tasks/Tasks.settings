@@ -62,14 +62,14 @@
       <Flownex.Solver.FlowSolver>
         <Properties>Data dDensityError dEnergyError dErrorEstimate dMassFlowError dMaxCourantPressure dMaxCourantScalar dMaxTimeStepChangeConcentration dMaxTimeStepChangeEnthalpy dMaxTimeStepChangePressure dPAmb dPressureError dTime dTimeStepSize FlowPathsManager Identifier iFlowElementCount iFlowNodeCount iHeatNodeCount iNumberMinimumTimeStepReached iNumberRejectedTimeSteps IsDefaultTask IterationCount LastUserNumber MaxContinuityResidual MaxEnergyResidual MaxMomentumResidual NumberOfThreads PersistedIdentifierWithTemplate PreviousTime RestartDataFileName SolverConfiguration.AlphaCNN SolverConfiguration.bEaseLowFlowTemperatureConverge SolverConfiguration.bTreatHXTwoPhaseErrorsAsWarnings SolverConfiguration.CalcAmbTemp SolverConfiguration.cAmbientPressureSpecification SolverConfiguration.CombustionCalculationMode SolverConfiguration.ConvergeCriteria SolverConfiguration.ConvergeCriteriaConc SolverConfiguration.ConvergeCriteriaTransient SolverConfiguration.cTPTankSSEnergySolverOption SolverConfiguration.cUserTransientSolverOption SolverConfiguration.dAlphaCNIT SolverConfiguration.dAlphaFNIT SolverConfiguration.dAlphaHNIT SolverConfiguration.dAlphaMNIT SolverConfiguration.dAlphaPhiNIT SolverConfiguration.dEaseLowFlowThreshold SolverConfiguration.DiameterScalingFactor SolverConfiguration.dMinAllowableTPTankSSEnergySource SolverConfiguration.dMinRelaxationExternalSolvers SolverConfiguration.dRelaxMassFraction SolverConfiguration.dRelaxNonLinearConcSolver SolverConfiguration.dRelaxSolidNodeTemp SolverConfiguration.dRelaxStaticPresBoundaries SolverConfiguration.dRelaxTPTankSSEnergy SolverConfiguration.dRelaxVortex SolverConfiguration.dUserAmbientPressure SolverConfiguration.Elevation SolverConfiguration.FluidDataReference SolverConfiguration.GenerateReactorResultsPeriodically SolverConfiguration.GenerateResultsAfterSteadyState SolverConfiguration.GenerateResultsAfterTransient SolverConfiguration.GenerateResultsPeriodically SolverConfiguration.GiveErrorForMaterialPropertiesSmallerThanZero SolverConfiguration.GravitationalAcceleration SolverConfiguration.iMaxIterEFV SolverConfiguration.iMaxNumberIterationsExternalSolver SolverConfiguration.InitialiseSteadyStateFromSnap SolverConfiguration.InitialValuesSnapFile SolverConfiguration.InitPressure SolverConfiguration.InitTemp SolverConfiguration.iNumIterBeforeScripts SolverConfiguration.iNumIterVortex SolverConfiguration.IsoThermal SolverConfiguration.LevelOfDetailShown SolverConfiguration.MaximumAllowableTemperature SolverConfiguration.MinimumAllowableTemperature SolverConfiguration.NumIterMain SolverConfiguration.NumIterPres SolverConfiguration.NumIterTemp1 SolverConfiguration.NumIterTemp2 SolverConfiguration.NumIterTempTransient SolverConfiguration.NumMaxIterIterativeConcSolver SolverConfiguration.NumMaxIterTempSS SolverConfiguration.ReactorResultsIntervals SolverConfiguration.RelaxCAU SolverConfiguration.RelaxDensityTwoPhase SolverConfiguration.RelaxJunction SolverConfiguration.RelaxMass SolverConfiguration.RelaxmDG SolverConfiguration.RelaxOpt SolverConfiguration.RelaxOR SolverConfiguration.RelaxPres SolverConfiguration.RelaxPRV SolverConfiguration.RelaxRho SolverConfiguration.RelaxShaftSpeed SolverConfiguration.RelaxTemp SolverConfiguration.RelaxTempEnd SolverConfiguration.RelaxTwoPhaseHTC SolverConfiguration.ResultsIntervals SolverConfiguration.RoughnessScalingFactor SolverConfiguration.SaveSolverStateVerbose SolverConfiguration.ShowWarnings SolverConfiguration.SolveTemp SolverConfiguration.SolveTraceElements SolverConfiguration.StartMode SolverConfiguration.TAmbient SolverConfiguration.TemperatureRiseCurve1 SolverConfiguration.TemperatureRiseCurve2 SolverConfiguration.TemperatureSolverBiCGMaxIterations SolverConfiguration.TemperatureSolverBiCGTConvergenceCriteria SolverConfiguration.TemperatureSolverUseBiCG SolverConfiguration.TreatPhaseChangeWarningsAsErrors TID TotalFluidMass TotalFluidVolume UserDescription </Properties>
         <Item Index="0" Identifier="Flow Solver">
-          <Values>  "" "0" "0" "1" "0" "0" "0" "0" "0 Specific_Energy kJ/kg" "0 Pressure_Stress kPa" "101.325 Pressure_Stress kPa" "0" "0 Time s" "0.1 Time s" "FlowPaths.config" "{TASK}Flow Solver" "22" "21" "16" "0" "0" "True" "17" "21" "1.12845749625669E-16" "1.82890134572005E-12" "4.38952892296355E-08" "1" "Flow Solver" "0" "FlownexSolverState" "1" "False" "False" "False" "StandardAtmosphericRelation" "DoNotCalculate" "0.0001" "1E-08" "0.0001" "Internal" "NonIterative" "1 None " "1 None " "1 None " "1 None " "1 None " "1E-09 Flow_Rate_Mass kg/s" "1" "0.001 Power kW" "0.05" "1" "1" "1" "1" "1" "1" "101.325 Pressure_Stress kPa" "0 Length m" "Click here to select..." "False" "False" "False" "False" "True" "9.806 Acceleration m/s²" "50" "50" "False" "" "100 Pressure_Stress kPa" "15 Temperature °C" "6" "1" "False" "ShowLess" "1.79769313486232E+308 Temperature °C" "-273.15 Temperature °C" "200" "50" "5" "5" "1" "50" "6" "" "1" "0.985" "0.1" "1" "1" "0.9" "1" "0.7" "1" "1" "1" "0.985" "0.985" "0.3" "" "1" "True" "True" "True" "False" "FromPrevious" "15 Temperature °C" "Click here to select..." "Click here to select..." "15" "1E-12" "True" "True" "" "0.770616595758935 Mass kg" "0.000772285155661364 Volume m³" "" </Values>
+          <Values>  "" "0" "0" "1" "0" "0" "0" "0" "0 Specific_Energy kJ/kg" "0 Pressure_Stress kPa" "101.325 Pressure_Stress kPa" "0" "0 Time s" "0.1 Time s" "FlowPaths.config" "{TASK}Flow Solver" "50" "52" "22" "0" "0" "True" "17" "21" "0" "3.73231233303289E-12" "7.97527347642686E-08" "1" "Flow Solver" "0" "FlownexSolverState" "1" "False" "False" "False" "StandardAtmosphericRelation" "DoNotCalculate" "0.0001" "1E-08" "0.0001" "Internal" "NonIterative" "1 None " "1 None " "1 None " "1 None " "1 None " "1E-09 Flow_Rate_Mass kg/s" "1" "0.001 Power kW" "0.05" "1" "1" "1" "1" "1" "1" "101.325 Pressure_Stress kPa" "0 Length m" "Click here to select..." "False" "False" "False" "False" "True" "9.806 Acceleration m/s²" "50" "50" "False" "" "100 Pressure_Stress kPa" "15 Temperature °C" "6" "1" "False" "ShowLess" "1.79769313486232E+308 Temperature °C" "-273.15 Temperature °C" "200" "50" "5" "5" "1" "50" "6" "" "1" "0.985" "0.1" "1" "1" "0.9" "1" "0.7" "1" "1" "1" "0.985" "0.985" "0.3" "" "1" "True" "True" "True" "False" "FromPrevious" "15 Temperature °C" "Click here to select..." "Click here to select..." "15" "1E-12" "True" "True" "" "0.843548750958156 Mass kg" "0.000846778796639369 Volume m³" "" </Values>
           <List Name="FluidMassResults">
             <IPS.Properties.List_HEX60_1>
               <ListItems>
                 <Flownex.Solver.FluidMassResult>
                   <Properties>Mass Name </Properties>
                   <Item Index="0">
-                    <Values>  "0.770616595758935 Mass kg" "H2O - Water" </Values>
+                    <Values>  "0.843548750958156 Mass kg" "H2O - Water" </Values>
                   </Item>
                 </Flownex.Solver.FluidMassResult>
               </ListItems>
@@ -81,7 +81,7 @@
                 <Flownex.Solver.FluidVolumeResult>
                   <Properties>Name Volume </Properties>
                   <Item Index="0">
-                    <Values>  "H2O - Water" "0.000772285155661364 Volume m³" </Values>
+                    <Values>  "H2O - Water" "0.000846778796639369 Volume m³" </Values>
                   </Item>
                 </Flownex.Solver.FluidVolumeResult>
               </ListItems>
@@ -104,7 +104,7 @@
       <IPS.Actions.ActionsTask>
         <Properties>ActionManager.HighlightRunning ActionManager.HistoryRecordingEnabled ActionManager.Running.DateStarted ActionManager.Running.Duration ActionManager.Running.pScenario.AddtionalValData ActionManager.Running.pScenario.Expanded ActionManager.Running.pScenario.ForceFinished ActionManager.Running.pScenario.Identifier ActionManager.Running.pScenario.RunningScenario ActionManager.Running.pScenario.ShouldContinue ActionManager.Running.pScenario.ShouldPause ActionManager.Running.pScenario.ShouldRemove ActionManager.Running.pScenario.ShouldReset ActionManager.Running.pScenario.ShouldResetWithOffset ActionManager.Running.pScenario.ShouldStop ActionManager.Running.pScenario.STargetType ActionManager.Running.pScenario.StartValue ActionManager.Running.pScenario.State ActionManager.Running.pScenario.StopTrigger ActionManager.Running.pScenario.Target ActionManager.Running.pScenario.Trigger ActionManager.Running.pScenario.TriggerRunningTime ActionManager.Running.pScenario.TValueType ActionManager.Running.pScenario.Value ActionManager.ShowAll ActionManager.ShowFinished ActionManager.ShowPaused ActionManager.ShowRunning ActionManager.ShowStopped ActionManager.SnapBeforeRecordingEnabled Data Identifier IsDefaultTask NumberOfThreads PersistedIdentifierWithTemplate PreviousTime TID UserDescription </Properties>
         <Item Index="0" Identifier="Actions">
-          <Values>  "True" "False" "16/05/2023 14:06:50" "0" "" "True" "False" "Recording Scenario" "False" "False" "False" "False" "True" "False" "False" "NONE" "0" "WAITING" "NEVER" "" "0" "0" "NONE" "" "True" "True" "True" "True" "True" "False" "" "{TASK}Actions" "True" "1" "Actions" "0" "" "" </Values>
+          <Values>  "True" "False" "19/05/2023 16:12:27" "0" "" "True" "False" "Recording Scenario" "False" "False" "False" "False" "True" "False" "False" "NONE" "0" "WAITING" "NEVER" "" "0" "0" "NONE" "" "True" "True" "True" "True" "True" "False" "" "{TASK}Actions" "True" "1" "Actions" "0" "" "" </Values>
         </Item>
       </IPS.Actions.ActionsTask>
       <IPS.Alarms.Task>
@@ -159,6 +159,42 @@
         <Properties>Data EndOption EndTime Identifier InitialTimeStepSize IsDefaultTask LastStep MaxTimeStepSize MinTimeStepSize NumberOfThreads OptionRunMode PersistedIdentifierWithTemplate PreviousTime SpeedFactor TID TimeStepControl TimeStepIncFactor UserDescription </Properties>
         <Item Index="0" Identifier="Optimiser">
           <Values>  "" "RunIndefinite" "0 Time s" "{TASK}Optimiser" "0.1 Time s" "True" "0" "100 Time s" "0.0001 Time s" "1" "FastAsPossible" "Optimiser" "0" "100" "" "Constant" "1.1" "" </Values>
+          <List Name="GAOptimiserConfigurations">
+            <IPS.GAOptimiser.GAOptimiserConfigurationList>
+              <ListItems>
+                <IPS.GAOptimiser.GAOptimiserConfiguration>
+                  <Properties>Active Convergence CrossOverSplitRatio Description MaxGensNoChange MaxNumberOfIterations Mode MutateSingleProbability MutateSwapOtherProbability MutateSwapSequenceSelfProbability MutateSwapSingleSelfProbability NumParallelPopulations OptimisationType PopulationMixingProbability PopulationMixingWithBestPopulationProbability PopulationSize SelectionRatio SolveSteadyState SolveTransient TransientTime </Properties>
+                  <Item Index="0">
+                    <Values>  "True" "0.001" "0.5" "Optimiser Config 1" "10" "100" "Maximization" "0.5" "0.1" "0.1" "0.1" "10" "BOBYQA" "0.25" "0.5" "20" "0.25" "True" "False" "0" </Values>
+                    <List Name="FitnessVariables">
+                      <IPS.GAOptimiser.FitnessVariableList>
+                        <ListItems>
+                          <IPS.GAOptimiser.FitnessVariable>
+                            <Properties>SpecificProperty WeightFactor </Properties>
+                            <Item Index="0">
+                              <Values>  "{COMPONENT}Shell &amp;amp; Tube Heat Exchanger - Shell Side - 1|:|TotalHeatTransfer" "1" </Values>
+                            </Item>
+                          </IPS.GAOptimiser.FitnessVariable>
+                        </ListItems>
+                      </IPS.GAOptimiser.FitnessVariableList>
+                    </List>
+                    <List Name="InputVariables">
+                      <IPS.GAOptimiser.InputVariableList>
+                        <ListItems>
+                          <IPS.GAOptimiser.InputVariable>
+                            <Properties>Maximum Minimum SpecificProperty Unit </Properties>
+                            <Item Index="0">
+                              <Values>  "15" "1" "{TASK}Global Parameters|:|Parameters.[0].Value" "&amp;lt; No Unit &amp;gt;" </Values>
+                            </Item>
+                          </IPS.GAOptimiser.InputVariable>
+                        </ListItems>
+                      </IPS.GAOptimiser.InputVariableList>
+                    </List>
+                  </Item>
+                </IPS.GAOptimiser.GAOptimiserConfiguration>
+              </ListItems>
+            </IPS.GAOptimiser.GAOptimiserConfigurationList>
+          </List>
         </Item>
       </IPS.GAOptimiser.GAOptimiser>
       <IPS.GlobalParameters.GlobalParametersTask>

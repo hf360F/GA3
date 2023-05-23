@@ -41,7 +41,7 @@
   <Library Name="NistFluidGenerator" Version="1.0.8314.0" />
   <IPS.Plugin.DrawingPageImpl>
     <Properties>FitInstructorPage FitOperatorPage FloatByDefault FullscreenInstructorPage FullscreenOperatorPage GridSpacingX GridSpacingY Identifier InstructorFloatByDefault InstructorPage OperatorFloatByDefault OperatorPage Origin PersistedIdentifierWithTemplate ScaleX ScaleY Size StartupInstructorPage StartupOperatorPage StyleSelector SystemName TID UserDescription ViewPortOrigin </Properties>
-    <Values>  "False" "False" "False" "False" "False" "50" "50" "Pages\Drawing Page(1).page" "False" "False" "False" "False" "0, 0" "Pages\Drawing Page(1).page" "0.9" "0.9" "8400, 5920" "False" "False" "*F*Solid;Horizontal1;;White;White;100*/F**S*DarkGray;Solid;1*/S**T*Black;Microsoft Sans Serif, 10pt;MiddleCenter;*/T*" "" "" "" "363, 131" </Values>
+    <Values>  "False" "False" "False" "False" "False" "50" "50" "Pages\Drawing Page(1).page" "False" "False" "False" "False" "0, 0" "Pages\Drawing Page(1).page" "0.799999952" "0.799999952" "8400, 5920" "False" "False" "*F*Solid;Horizontal1;;White;White;100*/F**S*DarkGray;Solid;1*/S**T*Black;Microsoft Sans Serif, 10pt;MiddleCenter;*/T*" "" "" "" "284, 171" </Values>
     <List Name="LayerDrawingDatas">
       <IPS.Plugin.LayerDrawingDataImplList>
         <ListItems>
@@ -86,7 +86,7 @@
                                   <Values>  "View1" "UpstreamFiber" "-60, 0" "-50, 0" </Values>
                                 </Item>
                                 <Item Index="2">
-                                  <Values>  "View1" "ShellAndTubeFiber" "0, 200" "0, 50" </Values>
+                                  <Values>  "View1" "ShellAndTubeFiber" "-6.10351563E-05, 200" "0, 50" </Values>
                                 </Item>
                               </IPS.Plugin.FiberDrawingDataImpl>
                             </ListItems>

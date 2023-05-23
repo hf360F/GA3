@@ -31,7 +31,7 @@ def main():
         mdot_h, dp_h = hx.chicSolver(hpump)
         mdot_c, dp_c = hx.chicSolver(cpump)
 
-        Q_pred = hx.thermalAnalysis(mdot_h, mdot_c, False)
+        Q_pred = hx.thermalAnalysis_LMTD(mdot_h, mdot_c, False)
 
         Qs[i] = Q
         var[i] = Nps
