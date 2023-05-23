@@ -12,7 +12,7 @@ HOTSTREAM = {"Ti": 60,  # C
              "mu": 6.51E-4}  # kg/ms
 
 # TUBE PROPERTIES
-EPST = 30e-6  # Effective roughness height for new drawn copper, mm
+EPST = 1.4e-6  # Effective roughness height for new drawn copper, mm
 KT = 386  # Thermal conductivity of copper, W/mK
 DO, DI = 0.008, 0.006  # Tube outer and inner diameter, m
 LT_MAX = 0.35 - 0.04 - 0.02 - 0.0025 * 2  # max length of individual cut tubes, m

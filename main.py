@@ -154,6 +154,10 @@ class HX:
 
         return tube + nozzles + baffles + shell + ends + orings
 
+    def ft_darcy(self, Ret):
+        # Haaland's approximation of Colebrook-White for Darcy friction factor
+        return (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
+
     def K(self, sigma, Ret):
         Ret = np.clip(Ret, 3000, 10000)
         sigma = np.clip(sigma, 0, 1)
@@ -205,11 +209,10 @@ class HX:
         Ret = self.hotStream["rho"] * Vt * self.di / self.hotStream["mu"]  # Tube Reynolds
 
         # Haaland's approximation of Colebrook-White for Darcy friction factor
-        fTube = (-1.8 * np.log10((self.epst / (self.di * 3.7)) ** 1.11 + (6.9 / Ret))) ** (-2)
-        dpFric = fTube * (self.lt * self.Npt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
+        dpFric = self.ft_darcy(Ret) * (self.lt * self.Npt / self.di) * 0.5 * self.hotStream["rho"] * (Vt ** 2)
 
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
-        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=fTube, rc=self.Y / 2, Re=Ret, method="Rennels")
+        Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=self.ft_darcy(Ret), rc=self.Y / 2, Re=Ret, method="Rennels")
         Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
@@ -298,12 +301,22 @@ class HX:
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
         Res = mdot_s * self.dseff / self.As / self.coldStream["mu"]
 
+        print(Ret,Res)
+
         # Pr and geometry constant are const
         Pr = 4.31
         c = 0.15 if self.isSquare else 0.2
 
         # Nusselt number correlations
-        Nut = 0.023 * Ret ** 0.8 * Pr ** 0.3
+        # Dittus-Boelter
+        # Nut = 0.026 * Ret ** 0.8 * Pr ** 0.3
+        # Petukhov-Popov
+        a = 1.07+900/Ret+0.63/(1*10*Pr)
+        # Cf is fanning friction factor
+        Cf = self.ft_darcy(Ret)/4
+        Nut = (Cf/2)*Ret*Pr/(a+12.7*np.sqrt(Cf/2)*Pr**(2/3)-1)
+        # Gnielinski
+        # Nut = (Cf/2)*(Ret-1000)*Pr/(1+12.7*np.sqrt(Cf/2)*(Pr**(2/3)-1))
         Nus = c * Res ** 0.6 * Pr ** 0.3
 
         # convection ht coeffs
@@ -325,17 +338,17 @@ class HX:
         NTU = self.HA(mdot_t, mdot_s) / Cmin
         Cstar = Cmin / Cmax
 
-        if self.Nb<6:
+        if self.Nb < 6:
             raise ValueError("No correlation for Nb<6")
 
         match self.Npt:
             case 1:
                 # pure counterflow
-                eta = (1-np.exp(-NTU*(1-Cstar)))
+                eta = (1 - np.exp(-NTU * (1 - Cstar)))
             case 2:
                 # TEMA-E_1,2 HX
-                Gamma = np.sqrt(1+Cstar**2)
-                eta = 2/((1+Cstar)+Gamma+1/np.tanh(NTU*Gamma/2))
+                Gamma = np.sqrt(1 + Cstar ** 2)
+                eta = 2 / ((1 + Cstar) + Gamma + 1 / np.tanh(NTU * Gamma / 2))
             case _:
                 raise ValueError("No correlation defined for Npt>2")
 
@@ -345,10 +358,12 @@ class HX:
         Tho = HOTSTREAM["Ti"] - Q / C2
 
         if verbose:
-            print(f"\nHX THERMAL ANALYSIS SUMMARY - NTU\n")
-            print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, NTU = {NTU:.3f}, effectiveness = {eta:.3f}.")
-            print(f"mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {Q / C1:.2f} C.")
-            print(f"mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {Q / C2:.2f} C.\n")
+            print(f"\nHX THERMAL ANALYSIS SUMMARY - NTU\n\n"
+
+                  f"  Heat transfer rate Q = {Q / 1000:.2f} kW.\n"
+                  f"  NTU = {NTU:.3f}, effectiveness = {eta:.3f}.\n"
+                  f"  mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {Q / C1:.2f} C.\n"
+                  f"  mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {Q / C2:.2f} C.\n")
         return Q
 
     def thermalAnalysis_LMTD(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
@@ -403,10 +418,12 @@ class HX:
         Q = HA * LMTD(Tho, Tco) * F
 
         if verbose:
-            print(f"\nHX THERMAL ANALYSIS SUMMARY - LMTD\n")
-            print(f"Heat transfer rate Q = {Q / 1000:.2f} kW, temperature delta correction F = {F:.3f}.")
-            print(f"mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.")
-            print(f"mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
+            print(f"\nHX THERMAL ANALYSIS SUMMARY - LMTD\n\n"
+
+                  f"  Heat transfer rate Q = {Q / 1000:.2f} kW.\n"
+                  f"  temperature delta correction F = {F:.3f}.\n"
+                  f"  mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.\n"
+                  f"  mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
 
         return Q
 
