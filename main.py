@@ -390,7 +390,7 @@ class Pump:
                 raise "invalid pump type"
 
         year = 2020 if year == 2019 else year
-        assert year in (2017, 2018, 2020, 2022)
+        assert year in (2017, 2018, 2020, 2022, 2023)
 
         data = np.genfromtxt(f"data/{type_str}-{year}.csv", delimiter=',')
         self.flowrate_data = data[:, 0]
