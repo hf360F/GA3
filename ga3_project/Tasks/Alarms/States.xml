@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <AlarmsStates>
-  <Stateb96737dad308433c867dcd9cab36f809>
+  <State5bda3b4151da4c5c9bbf00ef0dcc220a>
     <Columns>
       <Column name="AcknowledgedColumn">
         <Width>45</Width>
@@ -55,7 +55,7 @@
     <SortColumn />
     <RowHeight>18</RowHeight>
     <AutoFitColumns>True</AutoFitColumns>
-  </Stateb96737dad308433c867dcd9cab36f809>
+  </State5bda3b4151da4c5c9bbf00ef0dcc220a>
   <StateDefaultAlarmsWindow>
     <Columns>
       <Column name="AcknowledgedColumn">

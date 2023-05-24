@@ -47,7 +47,7 @@ for i in range(Nhx):
     mdotcList[i] = ga3.chicSolver(hxList[i], coldPump)[0] # Tube
     mdothList[i] = ga3.chicSolver(hxList[i], hotPump)[0] # Shell
 
-    QList[i]= hxList[i].thermalAnalysis(mdot_t = mdotcList[i], mdot_s = mdothList[i], verbose = False)
+    QList[i]= hxList[i].thermalAnalysis_LMTD(mdot_t = mdotcList[i], mdot_s = mdothList[i], verbose = False)
 
 fig, ax1 = plt.subplots()
 ax2 = ax1.twinx()

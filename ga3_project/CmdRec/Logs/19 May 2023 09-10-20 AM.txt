@@ -961,3 +961,5 @@ User:  Time: 19/05/2023 16:12:26 Simulation Time: 00h  00m  00s  000ms Execute s
 User:  Time: 19/05/2023 16:12:27 Simulation Time: 00h  00m  00s  000ms Execute server command: ResetTime
 User:  Time: 19/05/2023 17:35:11 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
 User:  Time: 19/05/2023 17:35:11 Simulation Time: 00h  00m  00s  000ms Deselect all on Pages\Drawing Page(1).page
+User:  Time: 22/05/2023 00:27:01 Simulation Time: 00h  00m  00s  000ms Open page: Pages\Drawing Page(1).page
+User:  Time: 22/05/2023 00:27:02 Simulation Time: 00h  00m  00s  000ms Close page: Pages\Drawing Page(1).page
