@@ -18,6 +18,7 @@ DO, DI = 0.008, 0.006  # Tube outer and inner diameter, m
 LT_MAX = 0.35 - 0.04 - 0.02 - 0.0025 * 2  # max length of individual cut tubes, m
 LT_TOTAL = 3.5  # max aggregate length of all copper tubing, m
 END_WASTAGE = 0.00414  # wasted tube sitting in seals on endcap, 5mm per endcap
+BAFFLE_END_SPACE = 0.04  # amount of clear space at ends of shell for nozzles
 
 # SHELL PROPERTIES
 DS = 0.064  # Shell inner diameter, m

@@ -45,27 +45,6 @@ def Flookup(P, R, Nps):
     return np.clip(F, 0, 1)[0]
 
 
-def K(sigma, Ret):
-    """Sum of inlet and exit tube loss factors.
-
-    Args:
-        sigma (float): Total tube area to header area ratio
-        Ret (float): Tube Reynolds number
-
-    Returns:
-        (float): Sum of Kc and Ke loss factors.
-    """
-    dfKc = pd.read_csv("data/Turb_Kc.csv").to_numpy()
-    dfKe = pd.read_csv("data/Turb_Ke.csv").to_numpy()
-
-    Ret = np.clip(Ret, 3000, 10000)
-    sigma = np.clip(sigma, 0, 1)
-
-    Kc = scipy.interpolate.griddata(dfKc[:, :-1], dfKc[:, -1], np.column_stack((Ret, sigma)), 'cubic')
-    Ke = scipy.interpolate.griddata(dfKe[:, :-1], dfKe[:, -1], np.column_stack((Ret, sigma)), 'cubic')
-
-    return Kc[0] + Ke[0]
-
 
 class HX:
     def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, B, G, ds, dn):
@@ -141,7 +120,11 @@ class HX:
 
     @property
     def dseff(self):
-        return self.ds * (self.As / self.Apipe)
+        # hydraulic diameter for rectangular channel
+        a = self.B
+        b = (self.Y-self.do)
+        return self.Nt**0.5*(2*a*b/(a+b))
+        # return self.ds * (self.As / self.Apipe)
 
     @property
     def mass(self):
@@ -213,7 +196,8 @@ class HX:
 
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
         Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=self.ft_darcy(Ret), rc=self.Y / 2, Re=Ret, method="Rennels")
-        Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn
+        Kbaffle = 0.7
+        Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn + self.Nb*Kbaffle
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
@@ -228,7 +212,7 @@ class HX:
             print(f"Tube flow area: {self.Attot:.6f} m^2")
             print(f"Tube bulk velocity: {Vt:.2f} m/s")
             print(f"Tube Reynolds number: {Ret:.0f}")
-            print(f"Tube friction factor: {fTube:.6f}")
+            print(f"Tube friction factor: {self.ft_darcy(Ret):.6f}")
             print(f"Sum of minor loss coefficients: {Ktot:.3f}")
             print(f"Total pressure drop: {tubeTotaldP:.0f} Pa (friction {dpFric:.0f},"
                   f" minor losses {dpMinor:.0f}, nozzles {dpNozzles:.0f})\n")
@@ -301,22 +285,25 @@ class HX:
         Ret = mdot_t * self.di / self.Attot / self.hotStream["mu"]
         Res = mdot_s * self.dseff / self.As / self.coldStream["mu"]
 
-        print(Ret,Res)
-
         # Pr and geometry constant are const
         Pr = 4.31
         c = 0.15 if self.isSquare else 0.2
 
         # Nusselt number correlations
+
+        # Tube-side
         # Dittus-Boelter
         # Nut = 0.026 * Ret ** 0.8 * Pr ** 0.3
+
         # Petukhov-Popov
-        a = 1.07+900/Ret+0.63/(1*10*Pr)
-        # Cf is fanning friction factor
-        Cf = self.ft_darcy(Ret)/4
-        Nut = (Cf/2)*Ret*Pr/(a+12.7*np.sqrt(Cf/2)*Pr**(2/3)-1)
+        a = 1.07 + 900 / Ret + 0.63 / (1 + 10 * Pr)
+        Cf = self.ft_darcy(Ret) / 4
+        Nut = (Cf / 2) * Ret * Pr / (a + 12.7 * np.sqrt(Cf / 2) * (Pr ** (2 / 3) - 1))
+
         # Gnielinski
         # Nut = (Cf/2)*(Ret-1000)*Pr/(1+12.7*np.sqrt(Cf/2)*(Pr**(2/3)-1))
+
+        # Shell-side needs work
         Nus = c * Res ** 0.6 * Pr ** 0.3
 
         # convection ht coeffs
@@ -339,20 +326,20 @@ class HX:
         Cstar = Cmin / Cmax
 
         if self.Nb < 6:
-            raise ValueError("No correlation for Nb<6")
+            raise ValueError(f"No correlation for Nb<6: Nb={self.Nb}")
 
         match self.Npt:
             case 1:
                 # pure counterflow
-                eta = (1 - np.exp(-NTU * (1 - Cstar)))
+                epsilon = (1 - np.exp(-NTU * (1 - Cstar)))/(1-Cstar*np.exp(-NTU*(1-Cstar)))
             case 2:
                 # TEMA-E_1,2 HX
                 Gamma = np.sqrt(1 + Cstar ** 2)
-                eta = 2 / ((1 + Cstar) + Gamma + 1 / np.tanh(NTU * Gamma / 2))
-            case _:
-                raise ValueError("No correlation defined for Npt>2")
+                epsilon = 2 / ((1 + Cstar) + Gamma + 1 / np.tanh(NTU * Gamma / 2))
+            case x:
+                raise ValueError(f"No correlation defined for Npt>2: Npt={x}")
 
-        Q = eta * Cmin * (HOTSTREAM["Ti"] - COLDSTREAM["Ti"])
+        Q = epsilon * Cmin * (HOTSTREAM["Ti"] - COLDSTREAM["Ti"])
 
         Tco = COLDSTREAM["Ti"] + Q / C1
         Tho = HOTSTREAM["Ti"] - Q / C2
@@ -361,7 +348,7 @@ class HX:
             print(f"\nHX THERMAL ANALYSIS SUMMARY - NTU\n\n"
 
                   f"  Heat transfer rate Q = {Q / 1000:.2f} kW.\n"
-                  f"  NTU = {NTU:.3f}, effectiveness = {eta:.3f}.\n"
+                  f"  NTU = {NTU:.3f}, effectiveness = {epsilon:.3f}.\n"
                   f"  mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {Q / C1:.2f} C.\n"
                   f"  mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {Q / C2:.2f} C.\n")
         return Q
@@ -446,7 +433,7 @@ class Pump:
                 raise "invalid pump type"
 
         year = 2020 if year == 2019 else year
-        assert year in (2017, 2018, 2020, 2022)
+        assert year in (2017, 2018, 2020, 2022, 2023)
 
         data = np.genfromtxt(f"data/{type_str}-{year}.csv", delimiter=',')
         self.flowrate_data = data[:, 0]

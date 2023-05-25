@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 
 import main as ga3
@@ -9,28 +11,43 @@ def num_passes():
     Npt = 2
     Nps = 1
     Nt = 12
-    lt = 0.25 - 2 * END_WASTAGE  # tube lengths
+
+    lt = np.min((LT_TOTAL / Nt, LT_MAX))-2*END_WASTAGE
 
     tube_arr = pd.read_csv("data/tube-arrangements.csv")
     tube_interp = interp1d(tube_arr["Nt"].to_numpy(), tube_arr["Y"].to_numpy())
-    Y = (DS / 0.064) * tube_interp(Nt) / 1000  # tube pitch (reference diameter for data weas 0.064)
+    Y = lambda Nt: (DS / 0.064) * tube_interp(Nt) / 1000  # tube pitch (reference diameter for data weas 0.064)
 
-    Nb = 12
-    B = lt / (Nb + 1)
-
+    Nbs = np.arange(6, 20)
     isSquare = False
     G = 0.2 * DS
 
-    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y, isSquare, Nps, Npt, Nb, B, G, DS, DN)
+    hx = ga3.HX(COLDSTREAM, HOTSTREAM, KT, EPST, lt, DO, DI, Nt, Y(Nt), isSquare, Nps, Npt, Nbs[0], 0, G, DS, DN)
 
-    hpump_22 = ga3.Pump(ga3.Pump.HOT, 2022)
-    cpump_22 = ga3.Pump(ga3.Pump.COLD, 2022)
+    hpump_23 = ga3.Pump(ga3.Pump.HOT, 2023)
+    cpump_23 = ga3.Pump(ga3.Pump.COLD, 2023)
 
-    mdot_h, dp_h = hx.chicSolver(hpump_22)
-    mdot_c, dp_c = hx.chicSolver(cpump_22)
+    Q_NTU = np.zeros_like(Nbs)
+    Q_LMTD = np.zeros_like(Nbs)
 
-    hx.thermalAnalysis_NTU(mdot_h, mdot_c, verbose=True)
-    hx.thermalAnalysis_LMTD(mdot_h, mdot_c, verbose=True)
+    for i, Nb in enumerate(Nbs):
+        hx.Nb = Nb
+        hx.B = hx.lt - BAFFLE_END_SPACE / (Nb - 1)
+
+        mdot_h, dp_h = hx.chicSolver(hpump_23)
+        mdot_c, dp_c = hx.chicSolver(cpump_23)
+
+        Q_NTU[i] = hx.thermalAnalysis_NTU(mdot_h, mdot_c)
+        Q_LMTD[i] = hx.thermalAnalysis_LMTD(mdot_h, mdot_c)
+
+    plt.plot(Nbs, Q_NTU, 'gx-', label='$\\epsilon$-NTU')
+    plt.plot(Nbs, Q_LMTD, 'bx-', label='F-LMTD')
+    plt.vlines(13, 0, 16.000, 'r')
+    plt.annotate('$N_t=13$', (13.5, 1.000), color='red')
+    plt.legend()
+    plt.ylabel('$\dot Q$')
+    plt.xlabel('$N_t$')
+    plt.show()
 
 
 if __name__ == "__main__":
