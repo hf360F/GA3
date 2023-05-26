@@ -45,7 +45,6 @@ def Flookup(P, R, Nps):
     return np.clip(F, 0, 1)[0]
 
 
-
 class HX:
     def __init__(self, coldStream, hotStream, kt, epst, lt, do, di, Nt, Y, isSquare, Nps, Npt, Nb, B, G, ds, dn):
         """Heat exchanger design class.
@@ -110,10 +109,6 @@ class HX:
     def An(self):
         return self.dn ** 2 * np.pi / 4
 
-    # @property
-    # def B(self):
-    #     return self.lt / (self.Nb + 1)
-
     @property
     def As(self):
         return self.ds * self.B * (1 - self.do / self.Y) / self.Nps  # Approximation of shell flow area
@@ -122,9 +117,9 @@ class HX:
     def dseff(self):
         # hydraulic diameter for rectangular channel
         a = self.B
-        b = (self.Y-self.do)
-        return self.Nt**0.5*(2*a*b/(a+b))
-        # return self.ds * (self.As / self.Apipe)
+        b = (self.Y - self.do)
+        # return self.Nt ** 0.5 * (2 * a * b / (a + b))
+        return self.ds * (self.As / self.Apipe)
 
     @property
     def mass(self):
@@ -197,7 +192,7 @@ class HX:
         # Sum entrance/exit loss factor, 180 degree bend loss factor (for Npt > 1), to calculate total minor loss
         Kreturn = ft.bend_rounded(Di=self.di, angle=180, fd=self.ft_darcy(Ret), rc=self.Y / 2, Re=Ret, method="Rennels")
         Kbaffle = 0.7
-        Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn + self.Nb*Kbaffle
+        Ktot = self.K(self.sigma, Ret) + (self.Npt - 1) * Kreturn + self.Nb * Kbaffle
 
         dpMinor = Ktot * 0.5 * self.hotStream["rho"] * Vt ** 2
 
@@ -326,18 +321,20 @@ class HX:
         Cstar = Cmin / Cmax
 
         if self.Nb < 6:
-            raise ValueError(f"No correlation for Nb<6: Nb={self.Nb}")
+            return None
+            # raise ValueError(f"No correlation for Nb<6: Nb={self.Nb}")
 
         match self.Npt:
             case 1:
                 # pure counterflow
-                epsilon = (1 - np.exp(-NTU * (1 - Cstar)))/(1-Cstar*np.exp(-NTU*(1-Cstar)))
+                epsilon = (1 - np.exp(-NTU * (1 - Cstar))) / (1 - Cstar * np.exp(-NTU * (1 - Cstar)))
             case 2:
                 # TEMA-E_1,2 HX
                 Gamma = np.sqrt(1 + Cstar ** 2)
                 epsilon = 2 / ((1 + Cstar) + Gamma + 1 / np.tanh(NTU * Gamma / 2))
             case x:
-                raise ValueError(f"No correlation defined for Npt>2: Npt={x}")
+                return None
+                # raise ValueError(f"No correlation defined for Npt>2: Npt={x}")
 
         Q = epsilon * Cmin * (HOTSTREAM["Ti"] - COLDSTREAM["Ti"])
 
@@ -353,7 +350,7 @@ class HX:
                   f"  mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {Q / C2:.2f} C.\n")
         return Q
 
-    def thermalAnalysis_LMTD(self, mdot_t: float, mdot_s: float, verbose: bool = False) -> float:
+    def thermalAnalysis_LMTD(self, mdot_t: float, mdot_s: float, verbose: bool = False, return_HAF=False) -> float:
         """
         Perform thermal analysis on the HX given the 2 mass flowrates.
 
@@ -412,7 +409,10 @@ class HX:
                   f"  mdoth = {mdot_t:.3f} kg/s, Tco = {Tco:.2f} C, deltaTc = {(Tco - self.coldStream['Ti']):.2f} C.\n"
                   f"  mdotc = {mdot_s:.3f} kg/s, Tho = {Tho:.2f} C, deltaTh = {(self.hotStream['Ti'] - Tho):.2f} C.\n")
 
-        return Q
+        if not return_HAF:
+            return Q
+        else:
+            return HA * F
 
 
 class Pump:
@@ -449,5 +449,6 @@ class Pump:
         :param flowrate: The required flowrate, m^3/s
         :return: The total pressure rise, Pa.
         """
+        c = 0.5
 
-        return np.clip(self.poly(flowrate), 0, None)
+        return np.clip(self.poly(flowrate), 0, None) + c * 0.5 * 990 * (flowrate / (np.pi * 0.01 ** 2)) ** 2
